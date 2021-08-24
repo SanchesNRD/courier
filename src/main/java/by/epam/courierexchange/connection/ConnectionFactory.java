@@ -40,7 +40,8 @@ class ConnectionFactory {
         try {
             connection = DriverManager.getConnection(URL, properties);
         } catch (SQLException e) {
-            throw new DatabaseConnectionException("Unable to establish connection with URL = " + URL);
+            logger.error("Unable to establish connection with URL = " + URL, e);
+            throw new DatabaseConnectionException("Unable to establish connection with URL = " + URL, e);
         }
         return new ProxyConnection(connection);
     }

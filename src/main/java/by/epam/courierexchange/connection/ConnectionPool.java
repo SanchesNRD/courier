@@ -22,9 +22,8 @@ public class ConnectionPool {
     private static final String POOL_RESOURCE = "datares/pool.properties";
     private final static int DEFAULT_POOL_SIZE = 16;
     private final static Lock lock = new ReentrantLock(true);
+    private final static AtomicBoolean instanceInitialized = new AtomicBoolean(false);
     private static ConnectionPool instance;
-    private static AtomicBoolean instanceInitialized = new AtomicBoolean(false);
-    private int poolSize;
 
     private BlockingDeque<ProxyConnection> freeConnection;
     private BlockingDeque<ProxyConnection> givenAwayConnection;
@@ -32,10 +31,11 @@ public class ConnectionPool {
 
     private ConnectionPool(){
         Properties properties = new Properties();
+        int poolSize;
         try(InputStream inputStream = ConnectionPool.class.getClassLoader().getResourceAsStream(POOL_RESOURCE)){
             properties.load(inputStream);
             poolSize = properties.get("poolsize") != null
-                    ? Integer.parseInt((String)properties.get("poolsize"))
+                    ? Integer.parseInt((String) properties.get("poolsize"))
                     : DEFAULT_POOL_SIZE;
             freeConnection = new LinkedBlockingDeque<>(poolSize);
             givenAwayConnection = new LinkedBlockingDeque<>();
