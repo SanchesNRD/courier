@@ -42,13 +42,14 @@ public class ConnectionPool {
             givenAwayConnection = new LinkedBlockingDeque<>();
             for(int i = 0; i < poolSize; i++){
                 ProxyConnection proxyConnection = ConnectionFactory.creatConnection();
-                freeConnection.put(proxyConnection);
+                freeConnection.add(proxyConnection);
             }
         }catch (IOException e) {
-            logger.warn("Property file not found. file path = " + POOL_RESOURCE);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            logger.error("Error with current thread", e);
+            logger.fatal("Unable to read database properties", e);
+            throw new RuntimeException("Unable to read database properties", e);
+        } catch (NumberFormatException e) {
+            logger.fatal("Unable to configure parameters of connection pool", e);
+            throw new RuntimeException("Unable to configure parameters of connection pool", e);
         } catch (DatabaseConnectionException e) {
             logger.error("Connection could not creat", e);
         }

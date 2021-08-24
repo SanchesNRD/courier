@@ -13,19 +13,18 @@ import java.util.Properties;
 
 class ConnectionFactory {
     private static final Logger logger = LogManager.getLogger();
-    private static final String POOL_RESOURCE = "datares/pool.properties";
-    private static final String DRIVER_KEY = "driver";
-    private static final String URL_KEY = "url";
+    private static final String POOL_RESOURCE = "datares/database.properties";
+    private static final String DRIVER_KEY = "db.driver";
+    private static final String URL_KEY = "db.url";
     private static final String URL;
     private static final Properties properties = new Properties();
 
     static {
-        String driveName = null;
         try(InputStream inputStream = ConnectionPool.class.getClassLoader().getResourceAsStream(POOL_RESOURCE)) {
             properties.load(inputStream);
-            driveName = (String)properties.get(DRIVER_KEY);
+            String driveName = (String)properties.getProperty(DRIVER_KEY);
             Class.forName(driveName);
-            URL = (String)properties.get(URL_KEY);
+            URL = (String)properties.getProperty(URL_KEY);
         }catch (IOException e){
             logger.fatal("Property file not load. file path = " + POOL_RESOURCE, e);
             throw new RuntimeException("Property file not load. file path = " + POOL_RESOURCE, e);
