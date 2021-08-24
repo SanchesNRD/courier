@@ -1,4 +1,4 @@
-package by.epam.courierexchange.controller.servlet;
+package by.epam.courierexchange.controller;
 
 import java.io.*;
 import java.util.List;
@@ -21,7 +21,6 @@ public class Controller extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
-
 
         String n = request.getParameter("num");
         int number = Integer.parseInt(n) * 7;
