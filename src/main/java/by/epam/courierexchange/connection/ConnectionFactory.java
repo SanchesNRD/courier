@@ -14,10 +14,10 @@ import java.util.Properties;
 class ConnectionFactory {
     private static final Logger logger = LogManager.getLogger();
     private static final String POOL_RESOURCE = "datares/pool.properties";
-    private static final Properties properties = new Properties();
-    private static final String URL;
     private static final String DRIVER_KEY = "driver";
     private static final String URL_KEY = "url";
+    private static final String URL;
+    private static final Properties properties = new Properties();
 
     static {
         String driveName = null;

@@ -20,6 +20,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ConnectionPool {
     private final static Logger logger = LogManager.getLogger();
     private static final String POOL_RESOURCE = "datares/pool.properties";
+    private static final String PROPERTIES_POOLSIZE = "poolsize";
     private final static int DEFAULT_POOL_SIZE = 16;
     private final static Lock lock = new ReentrantLock(true);
     private final static AtomicBoolean instanceInitialized = new AtomicBoolean(false);
@@ -34,8 +35,8 @@ public class ConnectionPool {
         int poolSize;
         try(InputStream inputStream = ConnectionPool.class.getClassLoader().getResourceAsStream(POOL_RESOURCE)){
             properties.load(inputStream);
-            poolSize = properties.get("poolsize") != null
-                    ? Integer.parseInt((String) properties.get("poolsize"))
+            poolSize = properties.get(PROPERTIES_POOLSIZE) != null
+                    ? Integer.parseInt((String) properties.get(PROPERTIES_POOLSIZE))
                     : DEFAULT_POOL_SIZE;
             freeConnection = new LinkedBlockingDeque<>(poolSize);
             givenAwayConnection = new LinkedBlockingDeque<>();
@@ -95,7 +96,8 @@ public class ConnectionPool {
                 logger.error("Error with current thread" + e);
             }
         }else{
-            logger.error("Wrong connection is detected");
+            logger.error("Wrong connection is detected:" + connection.getClass() +
+                    "should be ProxyConnection ");
             throw new RuntimeException("Wrong connection is detected:" + connection.getClass() +
                     "should be ProxyConnection ");
         }
