@@ -6,12 +6,7 @@
 </head>
 <body>
 <br/>
-
-<form action="controller" method="get">
-    <input type="text" name="num" value="1">
-    <input type="submit" value="push">
-</form>
+<jsp:forward page="/pages/login.jsp"></jsp:forward>
 <hr/>
-result=${res}
 </body>
 </html>

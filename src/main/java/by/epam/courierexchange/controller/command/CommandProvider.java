@@ -9,7 +9,7 @@ import static by.epam.courierexchange.controller.command.CommandType.*;
 
 public class CommandProvider {
     private static CommandProvider INSTANCE;
-    private final EnumMap<CommandType, Command> commands = new EnumMap<CommandType, Command>(CommandType.class);
+    private final EnumMap<CommandType, Command> commands = new EnumMap<>(CommandType.class);
 
     private CommandProvider(){
         commands.put(LOGIN, new LoginCommand());

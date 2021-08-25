@@ -9,18 +9,17 @@ import by.epam.courierexchange.model.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger();
-    private static UserService instance;
+    private static UserServiceImpl instance;
     private static final UserDaoImpl userDao = UserDaoImpl.getInstance();
 
     private UserServiceImpl() {
     }
 
-    public static UserService getInstance() {
+    public static UserServiceImpl getInstance() {
         if (instance == null) {
             instance = new UserServiceImpl();
         }
@@ -30,25 +29,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> authorized(String login, String password) throws ServiceException {
-        Optional<User> user;
-        User temporaryUser;
+        Optional<User> optionalUser;
+        User user;
         if (!UserValidator.loginIsValid(login) && !UserValidator.passwordIsValid(password)){
             return Optional.empty();
         }
 
         try {
-            user = userDao.selectByLogin(login);
-            if(user.isEmpty()){
+            optionalUser = userDao.selectByLogin(login);
+            if(optionalUser.isEmpty()){
                 return Optional.empty();
             }
-            temporaryUser = user.get();
-            if(!password.equals(temporaryUser.getPassword())){
+            user = optionalUser.get();
+            if(!password.equals(user.getPassword())){
                 return Optional.empty();
             }
         } catch (DaoException e) {
             logger.error("Exception while working with the database ", e);
             throw new ServiceException("exception while working with the database ", e);
         }
-        return user;
+        return optionalUser;
     }
 }

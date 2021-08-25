@@ -115,7 +115,7 @@ public class UserDaoImpl implements UserDao {
         User user = new User();
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID))
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_LOGIN))
         {
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
