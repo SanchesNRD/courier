@@ -2,7 +2,6 @@ package by.epam.courierexchange.model.dao.impl;
 
 import by.epam.courierexchange.model.connection.ConnectionPool;
 import by.epam.courierexchange.model.dao.AddressDao;
-import by.epam.courierexchange.model.dao.ColumnName;
 import by.epam.courierexchange.model.entity.Address;
 import by.epam.courierexchange.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +11,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static by.epam.courierexchange.model.dao.ColumnName.*;
 
 public class AddressDaoImpl implements AddressDao {
     private static final Logger logger = LogManager.getLogger();
@@ -46,18 +47,18 @@ public class AddressDaoImpl implements AddressDao {
 
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_ADDRESS_BY_CITY);)
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_ADDRESS_BY_CITY))
         {
             statement.setString(1, patternCity);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
                 Address address = new Address();
-                address.setId(resultSet.getLong(ColumnName.ID));
-                address.setCountry(resultSet.getString(ColumnName.ADDRESS_COUNTRY));
-                address.setCity(resultSet.getString(ColumnName.ADDRESS_CITY));
-                address.setStreet(resultSet.getString(ColumnName.ADDRESS_STREET));
-                address.setStreet_number(resultSet.getInt(ColumnName.ADDRESS_STREET_NUMBER));
-                address.setApartment(resultSet.getInt(ColumnName.ADDRESS_APARTMENT));
+                address.setId(resultSet.getLong(ID));
+                address.setCountry(resultSet.getString(ADDRESS_COUNTRY));
+                address.setCity(resultSet.getString(ADDRESS_CITY));
+                address.setStreet(resultSet.getString(ADDRESS_STREET));
+                address.setStreet_number(resultSet.getInt(ADDRESS_STREET_NUMBER));
+                address.setApartment(resultSet.getInt(ADDRESS_APARTMENT));
                 addresses.add(address);
             }
         } catch(SQLException e){
@@ -73,16 +74,16 @@ public class AddressDaoImpl implements AddressDao {
         try(
                 Connection connection = connectionPool.getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_ADDRESSES);)
+                ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_ADDRESSES))
         {
             while (resultSet.next()){
                 Address address = new Address();
-                address.setId(resultSet.getLong(ColumnName.ID));
-                address.setCountry(resultSet.getString(ColumnName.ADDRESS_COUNTRY));
-                address.setCity(resultSet.getString(ColumnName.ADDRESS_CITY));
-                address.setStreet(resultSet.getString(ColumnName.ADDRESS_STREET));
-                address.setStreet_number(resultSet.getInt(ColumnName.ADDRESS_STREET_NUMBER));
-                address.setApartment(resultSet.getInt(ColumnName.ADDRESS_APARTMENT));
+                address.setId(resultSet.getLong(ID));
+                address.setCountry(resultSet.getString(ADDRESS_COUNTRY));
+                address.setCity(resultSet.getString(ADDRESS_CITY));
+                address.setStreet(resultSet.getString(ADDRESS_STREET));
+                address.setStreet_number(resultSet.getInt(ADDRESS_STREET_NUMBER));
+                address.setApartment(resultSet.getInt(ADDRESS_APARTMENT));
                 addresses.add(address);
             }
         } catch(SQLException e){
@@ -97,19 +98,19 @@ public class AddressDaoImpl implements AddressDao {
         Address address = new Address();
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_ADDRESS_BY_ID);)
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_ADDRESS_BY_ID))
         {
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             if(!resultSet.next()){
                 return Optional.empty();
             }else {
-                address.setId(resultSet.getLong(ColumnName.ID));
-                address.setCountry(resultSet.getString(ColumnName.ADDRESS_COUNTRY));
-                address.setCity(resultSet.getString(ColumnName.ADDRESS_CITY));
-                address.setStreet(resultSet.getString(ColumnName.ADDRESS_STREET));
-                address.setStreet_number(resultSet.getInt(ColumnName.ADDRESS_STREET_NUMBER));
-                address.setApartment(resultSet.getInt(ColumnName.ADDRESS_APARTMENT));
+                address.setId(resultSet.getLong(ID));
+                address.setCountry(resultSet.getString(ADDRESS_COUNTRY));
+                address.setCity(resultSet.getString(ADDRESS_CITY));
+                address.setStreet(resultSet.getString(ADDRESS_STREET));
+                address.setStreet_number(resultSet.getInt(ADDRESS_STREET_NUMBER));
+                address.setApartment(resultSet.getInt(ADDRESS_APARTMENT));
             }
         } catch(SQLException e){
             logger.error("SQL exception in method selectAddressById ", e);
@@ -122,7 +123,7 @@ public class AddressDaoImpl implements AddressDao {
     public boolean deleteById(Long id) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_ADDRESS_BY_ID);)
+                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_ADDRESS_BY_ID))
         {
             statement.setLong(1, id);
             return statement.execute();
@@ -136,7 +137,7 @@ public class AddressDaoImpl implements AddressDao {
     public boolean create(Address address) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_CREAT_ADDRESS);)
+                PreparedStatement statement = connection.prepareStatement(SQL_CREAT_ADDRESS))
         {
             statement.setString(1, address.getCountry());
             statement.setString(2, address.getCity());
@@ -154,7 +155,7 @@ public class AddressDaoImpl implements AddressDao {
     public int update(Address address) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_ADDRESS);)
+                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_ADDRESS))
         {
             statement.setString(1, address.getCountry());
             statement.setString(2, address.getCity());

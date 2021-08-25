@@ -13,6 +13,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import static by.epam.courierexchange.model.dao.ColumnName.*;
 
 public class OrderDaoImpl implements OrderDao {
     private static final Logger logger = LogManager.getLogger();
@@ -45,18 +46,18 @@ public class OrderDaoImpl implements OrderDao {
         try(
                 Connection connection = connectionPool.getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL);)
+                ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL))
         {
             while(resultSet.next()){
                 Order order = new Order();
-                order.setId(resultSet.getLong(ColumnName.ID));
-                order.setClient(resultSet.getLong(ColumnName.CLIENT_ID));
-                order.setProduct(resultSet.getLong(ColumnName.PRODUCT_ID));
-                order.setTransport(resultSet.getLong(ColumnName.TRANSPORT_ID));
-                order.setAddress(resultSet.getLong(ColumnName.ADDRESS_ID));
-                order.setCourier(resultSet.getLong(ColumnName.COURTIER_ID));
-                order.setDate(resultSet.getDate(ColumnName.ORDER_DATE));
-                order.setOrderStatus(OrderStatus.parseStatus(resultSet.getShort(ColumnName.STATUS_ID)));
+                order.setId(resultSet.getLong(ID));
+                order.setClient(resultSet.getLong(CLIENT_ID));
+                order.setProduct(resultSet.getLong(PRODUCT_ID));
+                order.setTransport(resultSet.getLong(TRANSPORT_ID));
+                order.setAddress(resultSet.getLong(ADDRESS_ID));
+                order.setCourier(resultSet.getLong(COURTIER_ID));
+                order.setDate(resultSet.getDate(ORDER_DATE));
+                order.setOrderStatus(OrderStatus.parseStatus(resultSet.getShort(STATUS_ID)));
                 orders.add(order);
             }
         } catch (SQLException e){
@@ -71,21 +72,21 @@ public class OrderDaoImpl implements OrderDao {
         Order order = new Order();
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID);)
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID))
         {
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             if(!resultSet.next()){
                 return Optional.empty();
             }else{
-                order.setId(resultSet.getLong(ColumnName.ID));
-                order.setClient(resultSet.getLong(ColumnName.CLIENT_ID));
-                order.setProduct(resultSet.getLong(ColumnName.PRODUCT_ID));
-                order.setTransport(resultSet.getLong(ColumnName.TRANSPORT_ID));
-                order.setAddress(resultSet.getLong(ColumnName.ADDRESS_ID));
-                order.setCourier(resultSet.getLong(ColumnName.COURTIER_ID));
-                order.setDate(resultSet.getDate(ColumnName.ORDER_DATE));
-                order.setOrderStatus(OrderStatus.parseStatus(resultSet.getShort(ColumnName.STATUS_ID)));
+                order.setId(resultSet.getLong(ID));
+                order.setClient(resultSet.getLong(CLIENT_ID));
+                order.setProduct(resultSet.getLong(PRODUCT_ID));
+                order.setTransport(resultSet.getLong(TRANSPORT_ID));
+                order.setAddress(resultSet.getLong(ADDRESS_ID));
+                order.setCourier(resultSet.getLong(COURTIER_ID));
+                order.setDate(resultSet.getDate(ORDER_DATE));
+                order.setOrderStatus(OrderStatus.parseStatus(resultSet.getShort(STATUS_ID)));
             }
         } catch (SQLException e){
             logger.error("SQL exception in method in selectOrderById ", e);
@@ -98,7 +99,7 @@ public class OrderDaoImpl implements OrderDao {
     public boolean deleteById(Long id) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_BY_ID);)
+                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_BY_ID))
         {
             statement.setLong(1, id);
             return statement.execute();
@@ -112,7 +113,7 @@ public class OrderDaoImpl implements OrderDao {
     public boolean create(Order order) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_INSERT);)
+                PreparedStatement statement = connection.prepareStatement(SQL_INSERT))
         {
             statement.setLong(1, order.getId());
             statement.setLong(2, order.getClient());
@@ -133,7 +134,7 @@ public class OrderDaoImpl implements OrderDao {
     public int update(Order order) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE);)
+                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE))
         {
             statement.setLong(1, order.getClient());
             statement.setLong(2, order.getProduct());

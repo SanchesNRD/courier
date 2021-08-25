@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static by.epam.courierexchange.model.dao.ColumnName.*;
+
 public class CourierDaoImpl implements CourierDao {
     private static final Logger logger = LogManager.getLogger();
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
@@ -51,19 +53,19 @@ public class CourierDaoImpl implements CourierDao {
         try(
                 Connection connection = connectionPool.getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_COURIER);)
+                ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_COURIER))
         {
             while (resultSet.next()){
                 Courier courier = new Courier();
-                courier.setId(resultSet.getLong(ColumnName.USER_ID));
-                courier.setRating(resultSet.getDouble(ColumnName.ADDRESS_ID));
-                courier.setLogin(resultSet.getString(ColumnName.USER_LOGIN));
-                courier.setPassword(resultSet.getString(ColumnName.USER_PASSWORD));
-                courier.setMail(resultSet.getString(ColumnName.USER_MAIL));
-                courier.setName(resultSet.getString(ColumnName.USER_NAME));
-                courier.setSurname(resultSet.getString(ColumnName.USER_SURNAME));
-                courier.setPhone(resultSet.getString(ColumnName.USER_PHONE));
-                courier.setUserStatus(UserStatus.parseStatus(resultSet.getShort(ColumnName.STATUS_ID)));
+                courier.setId(resultSet.getLong(USER_ID));
+                courier.setRating(resultSet.getDouble(ADDRESS_ID));
+                courier.setLogin(resultSet.getString(USER_LOGIN));
+                courier.setPassword(resultSet.getString(USER_PASSWORD));
+                courier.setMail(resultSet.getString(USER_MAIL));
+                courier.setName(resultSet.getString(USER_NAME));
+                courier.setSurname(resultSet.getString(USER_SURNAME));
+                courier.setPhone(resultSet.getString(USER_PHONE));
+                courier.setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)));
                 couriers.add(courier);
             }
         } catch (SQLException e){
@@ -78,22 +80,22 @@ public class CourierDaoImpl implements CourierDao {
         Courier courier = new Courier();
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID);)
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID))
         {
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             if(!resultSet.next()){
                 return Optional.empty();
             }else {
-                courier.setId(resultSet.getLong(ColumnName.USER_ID));
-                courier.setRating(resultSet.getDouble(ColumnName.ADDRESS_ID));
-                courier.setLogin(resultSet.getString(ColumnName.USER_LOGIN));
-                courier.setPassword(resultSet.getString(ColumnName.USER_PASSWORD));
-                courier.setMail(resultSet.getString(ColumnName.USER_MAIL));
-                courier.setName(resultSet.getString(ColumnName.USER_NAME));
-                courier.setSurname(resultSet.getString(ColumnName.USER_SURNAME));
-                courier.setPhone(resultSet.getString(ColumnName.USER_PHONE));
-                courier.setUserStatus(UserStatus.parseStatus(resultSet.getShort(ColumnName.STATUS_ID)));
+                courier.setId(resultSet.getLong(USER_ID));
+                courier.setRating(resultSet.getDouble(ADDRESS_ID));
+                courier.setLogin(resultSet.getString(USER_LOGIN));
+                courier.setPassword(resultSet.getString(USER_PASSWORD));
+                courier.setMail(resultSet.getString(USER_MAIL));
+                courier.setName(resultSet.getString(USER_NAME));
+                courier.setSurname(resultSet.getString(USER_SURNAME));
+                courier.setPhone(resultSet.getString(USER_PHONE));
+                courier.setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)));
                 return Optional.of(courier);
             }
         } catch (SQLException e){
@@ -107,22 +109,22 @@ public class CourierDaoImpl implements CourierDao {
         Courier courier = new Courier();
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_LOGIN);)
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_LOGIN))
         {
             statement.setString(1, loginPattern);
             ResultSet resultSet = statement.executeQuery();
             if(!resultSet.next()){
                 return Optional.empty();
             }else {
-                courier.setId(resultSet.getLong(ColumnName.USER_ID));
-                courier.setRating(resultSet.getDouble(ColumnName.ADDRESS_ID));
-                courier.setLogin(resultSet.getString(ColumnName.USER_LOGIN));
-                courier.setPassword(resultSet.getString(ColumnName.USER_PASSWORD));
-                courier.setMail(resultSet.getString(ColumnName.USER_MAIL));
-                courier.setName(resultSet.getString(ColumnName.USER_NAME));
-                courier.setSurname(resultSet.getString(ColumnName.USER_SURNAME));
-                courier.setPhone(resultSet.getString(ColumnName.USER_PHONE));
-                courier.setUserStatus(UserStatus.parseStatus(resultSet.getShort(ColumnName.STATUS_ID)));
+                courier.setId(resultSet.getLong(USER_ID));
+                courier.setRating(resultSet.getDouble(ADDRESS_ID));
+                courier.setLogin(resultSet.getString(USER_LOGIN));
+                courier.setPassword(resultSet.getString(USER_PASSWORD));
+                courier.setMail(resultSet.getString(USER_MAIL));
+                courier.setName(resultSet.getString(USER_NAME));
+                courier.setSurname(resultSet.getString(USER_SURNAME));
+                courier.setPhone(resultSet.getString(USER_PHONE));
+                courier.setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)));
                 return Optional.of(courier);
             }
         } catch (SQLException e){
@@ -136,21 +138,21 @@ public class CourierDaoImpl implements CourierDao {
         List<Courier> couriers = new ArrayList<>();
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_RATING);)
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_RATING))
         {
             statement.setDouble(1, rating);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
                 Courier courier = new Courier();
-                courier.setId(resultSet.getLong(ColumnName.USER_ID));
-                courier.setRating(resultSet.getDouble(ColumnName.ADDRESS_ID));
-                courier.setLogin(resultSet.getString(ColumnName.USER_LOGIN));
-                courier.setPassword(resultSet.getString(ColumnName.USER_PASSWORD));
-                courier.setMail(resultSet.getString(ColumnName.USER_MAIL));
-                courier.setName(resultSet.getString(ColumnName.USER_NAME));
-                courier.setSurname(resultSet.getString(ColumnName.USER_SURNAME));
-                courier.setPhone(resultSet.getString(ColumnName.USER_PHONE));
-                courier.setUserStatus(UserStatus.parseStatus(resultSet.getShort(ColumnName.STATUS_ID)));
+                courier.setId(resultSet.getLong(USER_ID));
+                courier.setRating(resultSet.getDouble(ADDRESS_ID));
+                courier.setLogin(resultSet.getString(USER_LOGIN));
+                courier.setPassword(resultSet.getString(USER_PASSWORD));
+                courier.setMail(resultSet.getString(USER_MAIL));
+                courier.setName(resultSet.getString(USER_NAME));
+                courier.setSurname(resultSet.getString(USER_SURNAME));
+                courier.setPhone(resultSet.getString(USER_PHONE));
+                courier.setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)));
                 couriers.add(courier);
             }
         } catch (SQLException e){
@@ -164,7 +166,7 @@ public class CourierDaoImpl implements CourierDao {
     public boolean deleteById(Long id) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_BY_ID);)
+                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_BY_ID))
         {
             statement.setLong(1, id);
             return statement.execute();
@@ -178,7 +180,7 @@ public class CourierDaoImpl implements CourierDao {
     public boolean create(Courier courier) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_INSERT);)
+                PreparedStatement statement = connection.prepareStatement(SQL_INSERT))
         {
             statement.setLong(1, courier.getId());
             statement.setDouble(2, courier.getRating());
@@ -193,7 +195,7 @@ public class CourierDaoImpl implements CourierDao {
     public int update(Courier courier) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE);)
+                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE))
         {
             statement.setDouble(1, courier.getRating());
             statement.setLong(2, courier.getId());

@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static by.epam.courierexchange.model.dao.ColumnName.*;
+
 public class ClientDaoImpl implements ClientDao {
     private static final Logger logger = LogManager.getLogger();
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
@@ -48,22 +50,22 @@ public class ClientDaoImpl implements ClientDao {
         Client client = new Client();
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_CLIENT_BY_LOGIN);)
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_CLIENT_BY_LOGIN))
         {
             statement.setString(1, loginPattern);
             ResultSet resultSet = statement.executeQuery();
             if(!resultSet.next()){
                 return Optional.empty();
             } else{
-                client.setId(resultSet.getLong(ColumnName.USER_ID));
-                client.setAddress(resultSet.getLong(ColumnName.ADDRESS_ID));
-                client.setLogin(resultSet.getString(ColumnName.USER_LOGIN));
-                client.setPassword(resultSet.getString(ColumnName.USER_PASSWORD));
-                client.setMail(resultSet.getString(ColumnName.USER_MAIL));
-                client.setName(resultSet.getString(ColumnName.USER_NAME));
-                client.setSurname(resultSet.getString(ColumnName.USER_SURNAME));
-                client.setPhone(resultSet.getString(ColumnName.USER_PHONE));
-                client.setUserStatus(UserStatus.parseStatus(resultSet.getShort(ColumnName.STATUS_ID)));
+                client.setId(resultSet.getLong(USER_ID));
+                client.setAddress(resultSet.getLong(ADDRESS_ID));
+                client.setLogin(resultSet.getString(USER_LOGIN));
+                client.setPassword(resultSet.getString(USER_PASSWORD));
+                client.setMail(resultSet.getString(USER_MAIL));
+                client.setName(resultSet.getString(USER_NAME));
+                client.setSurname(resultSet.getString(USER_SURNAME));
+                client.setPhone(resultSet.getString(USER_PHONE));
+                client.setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)));
             }
         } catch (SQLException e){
             logger.error("SQL exception in method selectClientByLogin ", e);
@@ -77,21 +79,21 @@ public class ClientDaoImpl implements ClientDao {
         List<Client> clients = new ArrayList<>();
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_CLIENTS_BY_STATUS);)
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_CLIENTS_BY_STATUS))
         {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
                 Client client = new Client();
-                client.setId(resultSet.getLong(ColumnName.USER_ID));
-                client.setAddress(resultSet.getLong(ColumnName.ADDRESS_ID));
-                client.setLogin(resultSet.getString(ColumnName.USER_LOGIN));
-                client.setPassword(resultSet.getString(ColumnName.USER_PASSWORD));
-                client.setMail(resultSet.getString(ColumnName.USER_MAIL));
-                client.setName(resultSet.getString(ColumnName.USER_NAME));
-                client.setSurname(resultSet.getString(ColumnName.USER_SURNAME));
-                client.setPhone(resultSet.getString(ColumnName.USER_PHONE));
-                client.setUserStatus(UserStatus.parseStatus(resultSet.getShort(ColumnName.STATUS_ID)));
+                client.setId(resultSet.getLong(USER_ID));
+                client.setAddress(resultSet.getLong(ADDRESS_ID));
+                client.setLogin(resultSet.getString(USER_LOGIN));
+                client.setPassword(resultSet.getString(USER_PASSWORD));
+                client.setMail(resultSet.getString(USER_MAIL));
+                client.setName(resultSet.getString(USER_NAME));
+                client.setSurname(resultSet.getString(USER_SURNAME));
+                client.setPhone(resultSet.getString(USER_PHONE));
+                client.setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)));
                 clients.add(client);
             }
         } catch (SQLException e){
@@ -107,19 +109,19 @@ public class ClientDaoImpl implements ClientDao {
         try(
                 Connection connection = connectionPool.getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_CLIENTS);)
+                ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_CLIENTS))
         {
             while (resultSet.next()){
                 Client client = new Client();
-                client.setId(resultSet.getLong(ColumnName.USER_ID));
-                client.setAddress(resultSet.getLong(ColumnName.ADDRESS_ID));
-                client.setLogin(resultSet.getString(ColumnName.USER_LOGIN));
-                client.setPassword(resultSet.getString(ColumnName.USER_PASSWORD));
-                client.setMail(resultSet.getString(ColumnName.USER_MAIL));
-                client.setName(resultSet.getString(ColumnName.USER_NAME));
-                client.setSurname(resultSet.getString(ColumnName.USER_SURNAME));
-                client.setPhone(resultSet.getString(ColumnName.USER_PHONE));
-                client.setUserStatus(UserStatus.parseStatus(resultSet.getShort(ColumnName.STATUS_ID)));
+                client.setId(resultSet.getLong(USER_ID));
+                client.setAddress(resultSet.getLong(ADDRESS_ID));
+                client.setLogin(resultSet.getString(USER_LOGIN));
+                client.setPassword(resultSet.getString(USER_PASSWORD));
+                client.setMail(resultSet.getString(USER_MAIL));
+                client.setName(resultSet.getString(USER_NAME));
+                client.setSurname(resultSet.getString(USER_SURNAME));
+                client.setPhone(resultSet.getString(USER_PHONE));
+                client.setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)));
                 clients.add(client);
             }
         } catch (SQLException e){
@@ -140,15 +142,15 @@ public class ClientDaoImpl implements ClientDao {
             if(!resultSet.next()){
                 return Optional.empty();
             }else{
-                client.setId(resultSet.getLong(ColumnName.USER_ID));
-                client.setAddress(resultSet.getLong(ColumnName.ADDRESS_ID));
-                client.setLogin(resultSet.getString(ColumnName.USER_LOGIN));
-                client.setPassword(resultSet.getString(ColumnName.USER_PASSWORD));
-                client.setMail(resultSet.getString(ColumnName.USER_MAIL));
-                client.setName(resultSet.getString(ColumnName.USER_NAME));
-                client.setSurname(resultSet.getString(ColumnName.USER_SURNAME));
-                client.setPhone(resultSet.getString(ColumnName.USER_PHONE));
-                client.setUserStatus(UserStatus.parseStatus(resultSet.getShort(ColumnName.STATUS_ID)));
+                client.setId(resultSet.getLong(USER_ID));
+                client.setAddress(resultSet.getLong(ADDRESS_ID));
+                client.setLogin(resultSet.getString(USER_LOGIN));
+                client.setPassword(resultSet.getString(USER_PASSWORD));
+                client.setMail(resultSet.getString(USER_MAIL));
+                client.setName(resultSet.getString(USER_NAME));
+                client.setSurname(resultSet.getString(USER_SURNAME));
+                client.setPhone(resultSet.getString(USER_PHONE));
+                client.setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)));
             }
         } catch (SQLException e){
             logger.error("SQL exception in method selectClientById ", e);
@@ -161,7 +163,7 @@ public class ClientDaoImpl implements ClientDao {
     public boolean deleteById(Long id) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_CLIENT_BY_ID);)
+                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_CLIENT_BY_ID))
         {
             statement.setLong(1, id);
             return statement.execute();
@@ -175,7 +177,7 @@ public class ClientDaoImpl implements ClientDao {
     public boolean create(Client client) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_INSERT_CLIENT);)
+                PreparedStatement statement = connection.prepareStatement(SQL_INSERT_CLIENT))
         {
             statement.setLong(1, client.getId());
             statement.setLong(2, client.getAddress());
@@ -190,7 +192,7 @@ public class ClientDaoImpl implements ClientDao {
     public int update(Client client) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_CLIENT);)
+                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_CLIENT))
         {
             statement.setLong(1, client.getAddress());
             statement.setLong(2, client.getId());

@@ -13,6 +13,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import static by.epam.courierexchange.model.dao.ColumnName.*;
 
 public class ProductDaoImpl implements ProductDao {
     private static final Logger logger = LogManager.getLogger();
@@ -47,15 +48,15 @@ public class ProductDaoImpl implements ProductDao {
         try(
                 Connection connection = connectionPool.getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL);)
+                ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL))
         {
             while(resultSet.next()){
                 Product product = new Product();
-                product.setId(resultSet.getLong(ColumnName.ID));
-                product.setWeight(resultSet.getInt(ColumnName.PRODUCT_WEIGHT));
-                product.setLength(resultSet.getInt(ColumnName.PRODUCT_LENGTH));
-                product.setWidth(resultSet.getInt(ColumnName.PRODUCT_WIDTH));
-                product.setProductType(ProductType.parseType(resultSet.getShort(ColumnName.TYPE_ID)));
+                product.setId(resultSet.getLong(ID));
+                product.setWeight(resultSet.getInt(PRODUCT_WEIGHT));
+                product.setLength(resultSet.getInt(PRODUCT_LENGTH));
+                product.setWidth(resultSet.getInt(PRODUCT_WIDTH));
+                product.setProductType(ProductType.parseType(resultSet.getShort(TYPE_ID)));
                 products.add(product);
             }
         } catch (SQLException e){
@@ -70,18 +71,18 @@ public class ProductDaoImpl implements ProductDao {
         Product product = new Product();
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID);)
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID))
         {
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             if(!resultSet.next()){
                 return Optional.empty();
             } else{
-                product.setId(resultSet.getLong(ColumnName.ID));
-                product.setWeight(resultSet.getInt(ColumnName.PRODUCT_WEIGHT));
-                product.setLength(resultSet.getInt(ColumnName.PRODUCT_LENGTH));
-                product.setWidth(resultSet.getInt(ColumnName.PRODUCT_WIDTH));
-                product.setProductType(ProductType.parseType(resultSet.getShort(ColumnName.TYPE_ID)));
+                product.setId(resultSet.getLong(ID));
+                product.setWeight(resultSet.getInt(PRODUCT_WEIGHT));
+                product.setLength(resultSet.getInt(PRODUCT_LENGTH));
+                product.setWidth(resultSet.getInt(PRODUCT_WIDTH));
+                product.setProductType(ProductType.parseType(resultSet.getShort(TYPE_ID)));
             }
         } catch (SQLException e){
             logger.error("SQL exception in method selectProductId", e);
@@ -95,17 +96,17 @@ public class ProductDaoImpl implements ProductDao {
         List<Product> products = new ArrayList<>();
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_TYPE);)
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_TYPE))
         {
             statement.setInt(1,type);
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()){
                 Product product = new Product();
-                product.setId(resultSet.getLong(ColumnName.ID));
-                product.setWeight(resultSet.getInt(ColumnName.PRODUCT_WEIGHT));
-                product.setLength(resultSet.getInt(ColumnName.PRODUCT_LENGTH));
-                product.setWidth(resultSet.getInt(ColumnName.PRODUCT_WIDTH));
-                product.setProductType(ProductType.parseType(resultSet.getShort(ColumnName.TYPE_ID)));
+                product.setId(resultSet.getLong(ID));
+                product.setWeight(resultSet.getInt(PRODUCT_WEIGHT));
+                product.setLength(resultSet.getInt(PRODUCT_LENGTH));
+                product.setWidth(resultSet.getInt(PRODUCT_WIDTH));
+                product.setProductType(ProductType.parseType(resultSet.getShort(TYPE_ID)));
                 products.add(product);
             }
         } catch (SQLException e){
@@ -119,7 +120,7 @@ public class ProductDaoImpl implements ProductDao {
     public boolean deleteById(Long id) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_BY_ID);)
+                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_BY_ID))
         {
             statement.setLong(1, id);
             return statement.execute();
@@ -133,7 +134,7 @@ public class ProductDaoImpl implements ProductDao {
     public boolean create(Product product) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_INSERT);)
+                PreparedStatement statement = connection.prepareStatement(SQL_INSERT))
         {
             statement.setLong(1, product.getId());
             statement.setInt(2, product.getWeight());
@@ -152,7 +153,7 @@ public class ProductDaoImpl implements ProductDao {
     public int update(Product product) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE);)
+                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE))
         {
             statement.setInt(1, product.getWeight());
             statement.setInt(2, product.getLength());

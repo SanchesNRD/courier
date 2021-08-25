@@ -13,6 +13,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import static by.epam.courierexchange.model.dao.ColumnName.*;
 
 public class TransportDaoImpl implements TransportDao {
     private static final Logger logger = LogManager.getLogger();
@@ -55,16 +56,16 @@ public class TransportDaoImpl implements TransportDao {
         try(
                 Connection connection = connectionPool.getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL);)
+                ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL))
         {
             while(resultSet.next()){
                 Transport transport = new Transport();
-                transport.setId(resultSet.getLong(ColumnName.ID));
-                transport.setName(resultSet.getString(ColumnName.TRANSPORT_NAME));
-                transport.setAverageSpeed(resultSet.getInt(ColumnName.TRANSPORT_AVERAGE_SPEED));
-                transport.setImage((resultSet.getBinaryStream(ColumnName.TRANSPORT_IMAGE)));
-                transport.setMaxProductWeight(resultSet.getInt(ColumnName.TRANSPORT_MAX_PRODUCT_WEIGHT));
-                transport.setTransportType(TransportType.parseType(resultSet.getShort(ColumnName.TYPE_ID)));
+                transport.setId(resultSet.getLong(ID));
+                transport.setName(resultSet.getString(TRANSPORT_NAME));
+                transport.setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED));
+                transport.setImage((resultSet.getBinaryStream(TRANSPORT_IMAGE)));
+                transport.setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT));
+                transport.setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)));
                 transports.add(transport);
             }
         } catch (SQLException e){
@@ -79,19 +80,19 @@ public class TransportDaoImpl implements TransportDao {
         Transport transport = new Transport();
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID);)
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID))
         {
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             if(!resultSet.next()){
                 return Optional.empty();
             }else{
-                transport.setId(resultSet.getLong(ColumnName.ID));
-                transport.setName(resultSet.getString(ColumnName.TRANSPORT_NAME));
-                transport.setAverageSpeed(resultSet.getInt(ColumnName.TRANSPORT_AVERAGE_SPEED));
-                transport.setImage((resultSet.getBinaryStream(ColumnName.TRANSPORT_IMAGE)));
-                transport.setMaxProductWeight(resultSet.getInt(ColumnName.TRANSPORT_MAX_PRODUCT_WEIGHT));
-                transport.setTransportType(TransportType.parseType(resultSet.getShort(ColumnName.TYPE_ID)));
+                transport.setId(resultSet.getLong(ID));
+                transport.setName(resultSet.getString(TRANSPORT_NAME));
+                transport.setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED));
+                transport.setImage((resultSet.getBinaryStream(TRANSPORT_IMAGE)));
+                transport.setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT));
+                transport.setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)));
                 return Optional.of(transport);
             }
         } catch (SQLException e){
@@ -105,18 +106,18 @@ public class TransportDaoImpl implements TransportDao {
         List<Transport> transports = new ArrayList<>();
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_TYPE);)
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_TYPE))
         {
             statement.setInt(1, type);
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()){
                 Transport transport = new Transport();
-                transport.setId(resultSet.getLong(ColumnName.ID));
-                transport.setName(resultSet.getString(ColumnName.TRANSPORT_NAME));
-                transport.setAverageSpeed(resultSet.getInt(ColumnName.TRANSPORT_AVERAGE_SPEED));
-                transport.setImage((resultSet.getBinaryStream(ColumnName.TRANSPORT_IMAGE)));
-                transport.setMaxProductWeight(resultSet.getInt(ColumnName.TRANSPORT_MAX_PRODUCT_WEIGHT));
-                transport.setTransportType(TransportType.parseType(resultSet.getShort(ColumnName.TYPE_ID)));
+                transport.setId(resultSet.getLong(ID));
+                transport.setName(resultSet.getString(TRANSPORT_NAME));
+                transport.setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED));
+                transport.setImage((resultSet.getBinaryStream(TRANSPORT_IMAGE)));
+                transport.setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT));
+                transport.setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)));
                 transports.add(transport);
             }
         } catch (SQLException e){
@@ -131,18 +132,18 @@ public class TransportDaoImpl implements TransportDao {
         List<Transport> transports = new ArrayList<>();
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_SPEED);)
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_SPEED))
         {
             statement.setInt(1, speed);
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()){
                 Transport transport = new Transport();
-                transport.setId(resultSet.getLong(ColumnName.ID));
-                transport.setName(resultSet.getString(ColumnName.TRANSPORT_NAME));
-                transport.setAverageSpeed(resultSet.getInt(ColumnName.TRANSPORT_AVERAGE_SPEED));
-                transport.setImage((resultSet.getBinaryStream(ColumnName.TRANSPORT_IMAGE)));
-                transport.setMaxProductWeight(resultSet.getInt(ColumnName.TRANSPORT_MAX_PRODUCT_WEIGHT));
-                transport.setTransportType(TransportType.parseType(resultSet.getShort(ColumnName.TYPE_ID)));
+                transport.setId(resultSet.getLong(ID));
+                transport.setName(resultSet.getString(TRANSPORT_NAME));
+                transport.setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED));
+                transport.setImage((resultSet.getBinaryStream(TRANSPORT_IMAGE)));
+                transport.setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT));
+                transport.setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)));
                 transports.add(transport);
             }
         } catch (SQLException e){
@@ -157,18 +158,18 @@ public class TransportDaoImpl implements TransportDao {
         List<Transport> transports = new ArrayList<>();
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_WEIGHT);)
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_WEIGHT))
         {
             statement.setInt(1, weight);
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()){
                 Transport transport = new Transport();
-                transport.setId(resultSet.getLong(ColumnName.ID));
-                transport.setName(resultSet.getString(ColumnName.TRANSPORT_NAME));
-                transport.setAverageSpeed(resultSet.getInt(ColumnName.TRANSPORT_AVERAGE_SPEED));
-                transport.setImage((resultSet.getBinaryStream(ColumnName.TRANSPORT_IMAGE)));
-                transport.setMaxProductWeight(resultSet.getInt(ColumnName.TRANSPORT_MAX_PRODUCT_WEIGHT));
-                transport.setTransportType(TransportType.parseType(resultSet.getShort(ColumnName.TYPE_ID)));
+                transport.setId(resultSet.getLong(ID));
+                transport.setName(resultSet.getString(TRANSPORT_NAME));
+                transport.setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED));
+                transport.setImage((resultSet.getBinaryStream(TRANSPORT_IMAGE)));
+                transport.setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT));
+                transport.setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)));
                 transports.add(transport);
             }
         } catch (SQLException e){
@@ -182,7 +183,7 @@ public class TransportDaoImpl implements TransportDao {
     public boolean deleteById(Long id) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_BY_ID);)
+                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_BY_ID))
         {
             statement.setLong(1, id);
             return statement.execute();
@@ -196,7 +197,7 @@ public class TransportDaoImpl implements TransportDao {
     public boolean create(Transport transport) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_INSERT);)
+                PreparedStatement statement = connection.prepareStatement(SQL_INSERT))
         {
             statement.setLong(1, transport.getId());
             statement.setString(2, transport.getName());
@@ -215,7 +216,7 @@ public class TransportDaoImpl implements TransportDao {
     public int update(Transport transport) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE);)
+                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE))
         {
             statement.setString(1, transport.getName());
             statement.setInt(2, transport.getAverageSpeed());

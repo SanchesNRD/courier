@@ -12,6 +12,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import static by.epam.courierexchange.model.dao.ColumnName.*;
 
 public class CourierTransportDaoImpl implements CourierTransportDao {
     private static final Logger logger = LogManager.getLogger();
@@ -42,12 +43,12 @@ public class CourierTransportDaoImpl implements CourierTransportDao {
         try(
                 Connection connection = connectionPool.getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL);)
+                ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL))
         {
             while (resultSet.next()){
                 CourierTransport courierTransport = new CourierTransport();
-                courierTransport.setCourier(resultSet.getLong(ColumnName.COURTIER_ID));
-                courierTransport.setTransport(resultSet.getLong(ColumnName.TRANSPORT_ID));
+                courierTransport.setCourier(resultSet.getLong(COURTIER_ID));
+                courierTransport.setTransport(resultSet.getLong(TRANSPORT_ID));
                 courierTransports.add(courierTransport);
             }
         } catch (SQLException e){
@@ -62,15 +63,15 @@ public class CourierTransportDaoImpl implements CourierTransportDao {
         CourierTransport courierTransport = new CourierTransport();
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID);)
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID))
         {
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (!resultSet.next()){
                 return Optional.empty();
             }else{
-                courierTransport.setCourier(resultSet.getLong(ColumnName.COURTIER_ID));
-                courierTransport.setTransport(resultSet.getLong(ColumnName.TRANSPORT_ID));
+                courierTransport.setCourier(resultSet.getLong(COURTIER_ID));
+                courierTransport.setTransport(resultSet.getLong(TRANSPORT_ID));
                 return Optional.of(courierTransport);
             }
         } catch (SQLException e){
@@ -83,7 +84,7 @@ public class CourierTransportDaoImpl implements CourierTransportDao {
     public boolean deleteById(Long id) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_BY_ID);)
+                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_BY_ID))
         {
             statement.setLong(1,id);
             return statement.execute();
@@ -97,7 +98,7 @@ public class CourierTransportDaoImpl implements CourierTransportDao {
     public boolean create(CourierTransport courierTransport) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_INSERT);)
+                PreparedStatement statement = connection.prepareStatement(SQL_INSERT))
         {
             statement.setLong(1,courierTransport.getCourier());
             statement.setLong(2, courierTransport.getTransport());
@@ -112,7 +113,7 @@ public class CourierTransportDaoImpl implements CourierTransportDao {
     public int update(CourierTransport courierTransport) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE);)
+                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE))
         {
             statement.setLong(1, courierTransport.getTransport());
             statement.setLong(2,courierTransport.getCourier());
