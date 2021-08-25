@@ -3,17 +3,17 @@ package by.epam.courierexchange.model.entity;
 import java.util.Arrays;
 
 public enum UserStatus{
-    CONFIRMED(1), NON_CONFIRMED(2), BANED(3);
+    CONFIRMED((short)1), NON_CONFIRMED((short)2), BANED((short)3);
 
     private static final String UNDERSCORE = "_";
     private static final String HYPHEN = "-";
-    private final int statusId;
+    private final short statusId;
 
-    UserStatus(int statusId) {
+    UserStatus(short statusId) {
         this.statusId = statusId;
     }
 
-    public long getStatusId() {
+    public short getStatusId() {
         return statusId;
     }
 
