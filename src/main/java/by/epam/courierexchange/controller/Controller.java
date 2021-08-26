@@ -42,12 +42,18 @@ public class Controller extends HttpServlet {
         Command command = COMMAND_PROVIDER.getCommand(commandName);
         CommandResult commandResult = command.execute(request);
         switch (commandResult.getResponseType()) {
-            case FORWARD -> {
+            case FORWARD :{
                 RequestDispatcher dispatcher = request.getRequestDispatcher(commandResult.getPagePath());
                 dispatcher.forward(request, response);
+                break;
             }
-            case REDIRECT -> response.sendRedirect(commandResult.getPagePath());
-            default -> response.sendRedirect(PagePath.ERROR_PAGE);
+            case REDIRECT: {
+                response.sendRedirect(commandResult.getPagePath());
+                break;
+            }
+            default:{
+                response.sendRedirect(PagePath.ERROR_PAGE);
+            }
         }
     }
 }

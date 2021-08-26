@@ -11,6 +11,6 @@ public class LogoutCommand implements Command {
     public CommandResult execute(HttpServletRequest request) {
         HttpSession session = request.getSession(true);
         session.invalidate();
-        return new CommandResult(PagePath.INDEX, CommandResult.ResponseType.REDIRECT);
+        return new CommandResult(PagePath.LOGIN_PAGE, CommandResult.ResponseType.REDIRECT);
     }
 }

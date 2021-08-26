@@ -7,7 +7,6 @@
     <groupId>by.epam</groupId>
     <artifactId>courierexchange</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>courierexchange</name>
     <packaging>war</packaging>
 
     <properties>

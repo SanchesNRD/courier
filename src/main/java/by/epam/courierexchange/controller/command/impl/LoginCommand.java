@@ -2,6 +2,7 @@ package by.epam.courierexchange.controller.command.impl;
 
 import by.epam.courierexchange.controller.command.Command;
 import by.epam.courierexchange.controller.command.CommandResult;
+import by.epam.courierexchange.controller.command.RequestAttribute;
 import by.epam.courierexchange.controller.command.SessionAttribute;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.entity.User;
@@ -20,13 +21,12 @@ import static by.epam.courierexchange.controller.command.RequestParameter.*;
 
 public class LoginCommand implements Command {
     private static final Logger logger = LogManager.getLogger();
-    private UserServiceImpl userService;
 
     @Override
     public CommandResult execute(HttpServletRequest request) {
         String login = request.getParameter(LOGIN);
         String password = request.getParameter(PASSWORD);
-        userService = UserServiceImpl.getInstance();
+        UserServiceImpl userService = UserServiceImpl.getInstance();
         CommandResult commandResult;
 
         try {
@@ -35,6 +35,7 @@ public class LoginCommand implements Command {
                 User user = optionalUser.get();
                 HttpSession session = request.getSession(true);
                 session.setAttribute(SessionAttribute.USER, user);
+                request.setAttribute(RequestAttribute.USER_LOGIN, user.getLogin());
                 //todo modify with status
                 commandResult = new CommandResult(SUCCESS_PAGE, REDIRECT);
             }
