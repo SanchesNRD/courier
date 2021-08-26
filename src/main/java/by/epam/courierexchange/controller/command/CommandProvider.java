@@ -2,6 +2,7 @@ package by.epam.courierexchange.controller.command;
 
 import by.epam.courierexchange.controller.command.impl.DefaultCommand;
 import by.epam.courierexchange.controller.command.impl.LoginCommand;
+import by.epam.courierexchange.controller.command.impl.LogoutCommand;
 
 import java.util.EnumMap;
 
@@ -12,8 +13,9 @@ public class CommandProvider {
     private final EnumMap<CommandType, Command> commands = new EnumMap<>(CommandType.class);
 
     private CommandProvider(){
-        commands.put(LOGIN, new LoginCommand());
         commands.put(DEFAULT, new DefaultCommand());
+        commands.put(LOGIN, new LoginCommand());
+        commands.put(LOGOUT, new LogoutCommand());
     }
 
     public static CommandProvider getInstance(){

@@ -2,10 +2,12 @@ package by.epam.courierexchange.controller.command.impl;
 
 import by.epam.courierexchange.controller.command.Command;
 import by.epam.courierexchange.controller.command.CommandResult;
+import by.epam.courierexchange.controller.command.SessionAttribute;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.entity.User;
 import by.epam.courierexchange.model.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,6 +32,10 @@ public class LoginCommand implements Command {
         try {
             Optional<User> optionalUser = userService.authorized(login, password);
             if(optionalUser.isPresent()){
+                User user = optionalUser.get();
+                HttpSession session = request.getSession(true);
+                session.setAttribute(SessionAttribute.USER, user);
+                //todo modify with status
                 commandResult = new CommandResult(SUCCESS_PAGE, REDIRECT);
             }
             else{
