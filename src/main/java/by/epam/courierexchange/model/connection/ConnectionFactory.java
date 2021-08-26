@@ -34,7 +34,7 @@ class ConnectionFactory {
         }
     }
 
-    static ProxyConnection creatConnection() throws DatabaseConnectionException {
+    static ProxyConnection createConnection() throws DatabaseConnectionException {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(URL, properties);
