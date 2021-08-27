@@ -52,13 +52,14 @@ public class AddressDaoImpl implements AddressDao {
             statement.setString(1, patternCity);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
-                Address address = new Address();
-                address.setId(resultSet.getLong(ID));
-                address.setCountry(resultSet.getString(ADDRESS_COUNTRY));
-                address.setCity(resultSet.getString(ADDRESS_CITY));
-                address.setStreet(resultSet.getString(ADDRESS_STREET));
-                address.setStreet_number(resultSet.getInt(ADDRESS_STREET_NUMBER));
-                address.setApartment(resultSet.getInt(ADDRESS_APARTMENT));
+                Address address = new Address.AddressBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setCountry(resultSet.getString(ADDRESS_COUNTRY))
+                        .setCity(resultSet.getString(ADDRESS_CITY))
+                        .setStreet(resultSet.getString(ADDRESS_STREET))
+                        .setStreet_number(resultSet.getInt(ADDRESS_STREET_NUMBER))
+                        .setApartment(resultSet.getInt(ADDRESS_APARTMENT))
+                        .build();
                 addresses.add(address);
             }
         } catch(SQLException e){
@@ -77,13 +78,14 @@ public class AddressDaoImpl implements AddressDao {
                 ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_ADDRESSES))
         {
             while (resultSet.next()){
-                Address address = new Address();
-                address.setId(resultSet.getLong(ID));
-                address.setCountry(resultSet.getString(ADDRESS_COUNTRY));
-                address.setCity(resultSet.getString(ADDRESS_CITY));
-                address.setStreet(resultSet.getString(ADDRESS_STREET));
-                address.setStreet_number(resultSet.getInt(ADDRESS_STREET_NUMBER));
-                address.setApartment(resultSet.getInt(ADDRESS_APARTMENT));
+                Address address = new Address.AddressBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setCountry(resultSet.getString(ADDRESS_COUNTRY))
+                        .setCity(resultSet.getString(ADDRESS_CITY))
+                        .setStreet(resultSet.getString(ADDRESS_STREET))
+                        .setStreet_number(resultSet.getInt(ADDRESS_STREET_NUMBER))
+                        .setApartment(resultSet.getInt(ADDRESS_APARTMENT))
+                        .build();
                 addresses.add(address);
             }
         } catch(SQLException e){
@@ -95,7 +97,6 @@ public class AddressDaoImpl implements AddressDao {
 
     @Override
     public Optional<Address> selectById(Long id) throws DaoException{
-        Address address = new Address();
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_SELECT_ADDRESS_BY_ID))
@@ -105,18 +106,20 @@ public class AddressDaoImpl implements AddressDao {
             if(!resultSet.next()){
                 return Optional.empty();
             }else {
-                address.setId(resultSet.getLong(ID));
-                address.setCountry(resultSet.getString(ADDRESS_COUNTRY));
-                address.setCity(resultSet.getString(ADDRESS_CITY));
-                address.setStreet(resultSet.getString(ADDRESS_STREET));
-                address.setStreet_number(resultSet.getInt(ADDRESS_STREET_NUMBER));
-                address.setApartment(resultSet.getInt(ADDRESS_APARTMENT));
+                Address address = new Address.AddressBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setCountry(resultSet.getString(ADDRESS_COUNTRY))
+                        .setCity(resultSet.getString(ADDRESS_CITY))
+                        .setStreet(resultSet.getString(ADDRESS_STREET))
+                        .setStreet_number(resultSet.getInt(ADDRESS_STREET_NUMBER))
+                        .setApartment(resultSet.getInt(ADDRESS_APARTMENT))
+                        .build();
+                return Optional.of(address);
             }
         } catch(SQLException e){
             logger.error("SQL exception in method selectAddressById ", e);
             throw new DaoException("SQL exception in method selectAddressById ", e);
         }
-        return Optional.of(address);
     }
 
     @Override

@@ -1,9 +1,10 @@
 package by.epam.courierexchange.model.dao.impl;
 
 import by.epam.courierexchange.model.connection.ConnectionPool;
-import by.epam.courierexchange.model.dao.ColumnName;
 import by.epam.courierexchange.model.dao.CourierDao;
+import by.epam.courierexchange.model.entity.Client;
 import by.epam.courierexchange.model.entity.Courier;
+import by.epam.courierexchange.model.entity.User;
 import by.epam.courierexchange.model.entity.UserStatus;
 import by.epam.courierexchange.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
@@ -56,16 +57,18 @@ public class CourierDaoImpl implements CourierDao {
                 ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_COURIER))
         {
             while (resultSet.next()){
-                Courier courier = new Courier();
-                courier.setId(resultSet.getLong(USER_ID));
-                courier.setRating(resultSet.getDouble(ADDRESS_ID));
-                courier.setLogin(resultSet.getString(USER_LOGIN));
-                courier.setPassword(resultSet.getString(USER_PASSWORD));
-                courier.setMail(resultSet.getString(USER_MAIL));
-                courier.setName(resultSet.getString(USER_NAME));
-                courier.setSurname(resultSet.getString(USER_SURNAME));
-                courier.setPhone(resultSet.getString(USER_PHONE));
-                courier.setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)));
+                Courier courier = new Courier.CourierBuilder()
+                        .setRating(resultSet.getLong(COURIER_RATING))
+                        .setBuilder(new User.UserBuilder()
+                                .setId(resultSet.getLong(USER_ID))
+                                .setLogin(resultSet.getString(USER_LOGIN))
+                                .setPassword(resultSet.getString(USER_PASSWORD))
+                                .setMail(resultSet.getString(USER_MAIL))
+                                .setName(resultSet.getString(USER_NAME))
+                                .setSurname(resultSet.getString(USER_SURNAME))
+                                .setPhone(resultSet.getString(USER_PHONE))
+                                .setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID))))
+                        .build();
                 couriers.add(courier);
             }
         } catch (SQLException e){
@@ -77,7 +80,6 @@ public class CourierDaoImpl implements CourierDao {
 
     @Override
     public Optional<Courier> selectById(Long id) throws DaoException {
-        Courier courier = new Courier();
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID))
@@ -87,15 +89,18 @@ public class CourierDaoImpl implements CourierDao {
             if(!resultSet.next()){
                 return Optional.empty();
             }else {
-                courier.setId(resultSet.getLong(USER_ID));
-                courier.setRating(resultSet.getDouble(ADDRESS_ID));
-                courier.setLogin(resultSet.getString(USER_LOGIN));
-                courier.setPassword(resultSet.getString(USER_PASSWORD));
-                courier.setMail(resultSet.getString(USER_MAIL));
-                courier.setName(resultSet.getString(USER_NAME));
-                courier.setSurname(resultSet.getString(USER_SURNAME));
-                courier.setPhone(resultSet.getString(USER_PHONE));
-                courier.setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)));
+                Courier courier = new Courier.CourierBuilder()
+                        .setRating(resultSet.getLong(COURIER_RATING))
+                        .setBuilder(new User.UserBuilder()
+                                .setId(resultSet.getLong(USER_ID))
+                                .setLogin(resultSet.getString(USER_LOGIN))
+                                .setPassword(resultSet.getString(USER_PASSWORD))
+                                .setMail(resultSet.getString(USER_MAIL))
+                                .setName(resultSet.getString(USER_NAME))
+                                .setSurname(resultSet.getString(USER_SURNAME))
+                                .setPhone(resultSet.getString(USER_PHONE))
+                                .setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID))))
+                        .build();
                 return Optional.of(courier);
             }
         } catch (SQLException e){
@@ -106,7 +111,6 @@ public class CourierDaoImpl implements CourierDao {
 
     @Override
     public Optional<Courier> selectCourierByLogin(String loginPattern) throws DaoException {
-        Courier courier = new Courier();
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_LOGIN))
@@ -116,15 +120,18 @@ public class CourierDaoImpl implements CourierDao {
             if(!resultSet.next()){
                 return Optional.empty();
             }else {
-                courier.setId(resultSet.getLong(USER_ID));
-                courier.setRating(resultSet.getDouble(ADDRESS_ID));
-                courier.setLogin(resultSet.getString(USER_LOGIN));
-                courier.setPassword(resultSet.getString(USER_PASSWORD));
-                courier.setMail(resultSet.getString(USER_MAIL));
-                courier.setName(resultSet.getString(USER_NAME));
-                courier.setSurname(resultSet.getString(USER_SURNAME));
-                courier.setPhone(resultSet.getString(USER_PHONE));
-                courier.setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)));
+                Courier courier = new Courier.CourierBuilder()
+                        .setRating(resultSet.getLong(COURIER_RATING))
+                        .setBuilder(new User.UserBuilder()
+                                .setId(resultSet.getLong(USER_ID))
+                                .setLogin(resultSet.getString(USER_LOGIN))
+                                .setPassword(resultSet.getString(USER_PASSWORD))
+                                .setMail(resultSet.getString(USER_MAIL))
+                                .setName(resultSet.getString(USER_NAME))
+                                .setSurname(resultSet.getString(USER_SURNAME))
+                                .setPhone(resultSet.getString(USER_PHONE))
+                                .setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID))))
+                        .build();
                 return Optional.of(courier);
             }
         } catch (SQLException e){
@@ -143,16 +150,18 @@ public class CourierDaoImpl implements CourierDao {
             statement.setDouble(1, rating);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
-                Courier courier = new Courier();
-                courier.setId(resultSet.getLong(USER_ID));
-                courier.setRating(resultSet.getDouble(ADDRESS_ID));
-                courier.setLogin(resultSet.getString(USER_LOGIN));
-                courier.setPassword(resultSet.getString(USER_PASSWORD));
-                courier.setMail(resultSet.getString(USER_MAIL));
-                courier.setName(resultSet.getString(USER_NAME));
-                courier.setSurname(resultSet.getString(USER_SURNAME));
-                courier.setPhone(resultSet.getString(USER_PHONE));
-                courier.setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)));
+                Courier courier = new Courier.CourierBuilder()
+                        .setRating(resultSet.getLong(COURIER_RATING))
+                        .setBuilder(new User.UserBuilder()
+                                .setId(resultSet.getLong(USER_ID))
+                                .setLogin(resultSet.getString(USER_LOGIN))
+                                .setPassword(resultSet.getString(USER_PASSWORD))
+                                .setMail(resultSet.getString(USER_MAIL))
+                                .setName(resultSet.getString(USER_NAME))
+                                .setSurname(resultSet.getString(USER_SURNAME))
+                                .setPhone(resultSet.getString(USER_PHONE))
+                                .setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID))))
+                        .build();
                 couriers.add(courier);
             }
         } catch (SQLException e){

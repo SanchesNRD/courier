@@ -5,8 +5,6 @@
     <title>JSP - Hello World</title>
 </head>
 <body>
-<br/>
 <jsp:forward page="/pages/login.jsp"></jsp:forward>
-<hr/>
 </body>
 </html>

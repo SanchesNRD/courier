@@ -49,4 +49,6 @@ public class ColumnName {
 
     //orders
     public static final String ORDER_DATE = "date";
+
+    private ColumnName(){}
 }

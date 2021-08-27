@@ -3,12 +3,14 @@ package by.epam.courierexchange.model.entity;
 public class Client extends User{
     private long address_id;
 
-    public long getAddress() {
-        return address_id;
+
+    public Client(ClientBuilder clientBuilder) {
+        super(clientBuilder.builder);
+        this.address_id = clientBuilder.address_id;
     }
 
-    public void setAddress(long address_id) {
-        this.address_id = address_id;
+    public long getAddress() {
+        return address_id;
     }
 
     @Override
@@ -42,5 +44,25 @@ public class Client extends User{
         sb.append("").append(address_id);
         sb.append('}');
         return sb.toString();
+    }
+
+    public static class ClientBuilder{
+
+        private UserBuilder builder;
+        private long address_id;
+
+        public ClientBuilder setBuilder(UserBuilder builder) {
+            this.builder = builder;
+            return this;
+        }
+
+        public ClientBuilder setAddress(long address_id) {
+            this.address_id = address_id;
+            return this;
+        }
+
+        public Client build() {
+            return new Client(this);
+        }
     }
 }

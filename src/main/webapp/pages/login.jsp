@@ -11,7 +11,7 @@
     <title>Login</title>
 </head>
 <body>
-<form action="controller" name="loginForm" method="POST">
+<form action="${pageContext.request.contextPath}\controller" name="loginForm" method="POST">
     <input type="hidden" name="command" value="login"/>
     Login:<br/>
     <input type="text" name="login" value=""/>

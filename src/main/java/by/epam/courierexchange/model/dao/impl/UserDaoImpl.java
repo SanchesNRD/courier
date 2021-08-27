@@ -4,7 +4,6 @@ import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.model.connection.ConnectionPool;
 import by.epam.courierexchange.model.dao.UserDao;
 import by.epam.courierexchange.model.entity.*;
-import by.epam.courierexchange.model.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +17,7 @@ import static by.epam.courierexchange.model.dao.ColumnName.*;
 public class UserDaoImpl implements UserDao {
     private static final Logger logger = LogManager.getLogger();
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
-    private static UserDaoImpl instance;
+    private static final UserDaoImpl instance = new UserDaoImpl();
 
 
     private static final String SQL_SELECT_ALL= """
@@ -49,9 +48,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     public static UserDaoImpl getInstance(){
-        if (instance == null) {
-            instance = new UserDaoImpl();
-        }
         return instance;
     }
 
@@ -65,15 +61,16 @@ public class UserDaoImpl implements UserDao {
                 ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL))
         {
             while (resultSet.next()){
-                User user = new User();
-                user.setId(resultSet.getLong(ID));
-                user.setLogin(resultSet.getString(USER_LOGIN));
-                user.setPassword(resultSet.getString(USER_PASSWORD));
-                user.setMail(resultSet.getString(USER_MAIL));
-                user.setName(resultSet.getString(USER_NAME));
-                user.setSurname(resultSet.getString(USER_SURNAME));
-                user.setPhone(resultSet.getString(USER_PHONE));
-                user.setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)));
+                User user = new User.UserBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setLogin(resultSet.getString(USER_LOGIN))
+                        .setPassword(resultSet.getString(USER_PASSWORD))
+                        .setMail(resultSet.getString(USER_MAIL))
+                        .setName(resultSet.getString(USER_NAME))
+                        .setSurname(resultSet.getString(USER_SURNAME))
+                        .setPhone(resultSet.getString(USER_PHONE))
+                        .setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)))
+                        .build();;
                 users.add(user);
             }
         } catch (SQLException e){
@@ -85,7 +82,6 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> selectById(Long id) throws DaoException {
-        User user = new User();
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID))
@@ -95,14 +91,16 @@ public class UserDaoImpl implements UserDao {
             if(!resultSet.next()){
                 return Optional.empty();
             }else {
-                user.setId(resultSet.getLong(ID));
-                user.setLogin(resultSet.getString(USER_LOGIN));
-                user.setPassword(resultSet.getString(USER_PASSWORD));
-                user.setMail(resultSet.getString(USER_MAIL));
-                user.setName(resultSet.getString(USER_NAME));
-                user.setSurname(resultSet.getString(USER_SURNAME));
-                user.setPhone(resultSet.getString(USER_PHONE));
-                user.setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)));
+                User user = new User.UserBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setLogin(resultSet.getString(USER_LOGIN))
+                        .setPassword(resultSet.getString(USER_PASSWORD))
+                        .setMail(resultSet.getString(USER_MAIL))
+                        .setName(resultSet.getString(USER_NAME))
+                        .setSurname(resultSet.getString(USER_SURNAME))
+                        .setPhone(resultSet.getString(USER_PHONE))
+                        .setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)))
+                        .build();
                 return Optional.of(user);
             }
         } catch (SQLException e){
@@ -112,7 +110,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     public Optional<User> selectByLogin(String login) throws DaoException {
-        User user = new User();
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_LOGIN))
@@ -122,14 +119,16 @@ public class UserDaoImpl implements UserDao {
             if(!resultSet.next()){
                 return Optional.empty();
             }else {
-                user.setId(resultSet.getLong(ID));
-                user.setLogin(resultSet.getString(USER_LOGIN));
-                user.setPassword(resultSet.getString(USER_PASSWORD));
-                user.setMail(resultSet.getString(USER_MAIL));
-                user.setName(resultSet.getString(USER_NAME));
-                user.setSurname(resultSet.getString(USER_SURNAME));
-                user.setPhone(resultSet.getString(USER_PHONE));
-                user.setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)));
+                User user = new User.UserBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setLogin(resultSet.getString(USER_LOGIN))
+                        .setPassword(resultSet.getString(USER_PASSWORD))
+                        .setMail(resultSet.getString(USER_MAIL))
+                        .setName(resultSet.getString(USER_NAME))
+                        .setSurname(resultSet.getString(USER_SURNAME))
+                        .setPhone(resultSet.getString(USER_PHONE))
+                        .setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)))
+                        .build();
                 return Optional.of(user);
             }
         } catch (SQLException e){

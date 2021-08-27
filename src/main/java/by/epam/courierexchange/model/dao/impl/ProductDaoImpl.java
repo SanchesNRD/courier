@@ -1,7 +1,6 @@
 package by.epam.courierexchange.model.dao.impl;
 
 import by.epam.courierexchange.model.connection.ConnectionPool;
-import by.epam.courierexchange.model.dao.ColumnName;
 import by.epam.courierexchange.model.dao.ProductDao;
 import by.epam.courierexchange.model.entity.Product;
 import by.epam.courierexchange.model.entity.ProductType;
@@ -18,6 +17,7 @@ import static by.epam.courierexchange.model.dao.ColumnName.*;
 public class ProductDaoImpl implements ProductDao {
     private static final Logger logger = LogManager.getLogger();
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
+    private static final ProductDaoImpl instance = new ProductDaoImpl();
 
     private static final String SQL_SELECT_ALL="""
             SELECT id, weight, length, width, height, type_id 
@@ -42,6 +42,12 @@ public class ProductDaoImpl implements ProductDao {
             height=?, type_id=? WHERE id=?
             """;
 
+    private ProductDaoImpl(){}
+
+    public static ProductDaoImpl getInstance(){
+        return instance;
+    }
+
     @Override
     public List<Product> selectAll() throws DaoException {
         List<Product> products = new ArrayList<>();
@@ -51,12 +57,14 @@ public class ProductDaoImpl implements ProductDao {
                 ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL))
         {
             while(resultSet.next()){
-                Product product = new Product();
-                product.setId(resultSet.getLong(ID));
-                product.setWeight(resultSet.getInt(PRODUCT_WEIGHT));
-                product.setLength(resultSet.getInt(PRODUCT_LENGTH));
-                product.setWidth(resultSet.getInt(PRODUCT_WIDTH));
-                product.setProductType(ProductType.parseType(resultSet.getShort(TYPE_ID)));
+                Product product = new Product.ProductBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setWeight(resultSet.getInt(PRODUCT_WEIGHT))
+                        .setLength(resultSet.getInt(PRODUCT_LENGTH))
+                        .setWidth(resultSet.getInt(PRODUCT_WIDTH))
+                        .setHeight(resultSet.getInt(PRODUCT_HEIGHT))
+                        .setProductType(ProductType.parseType(resultSet.getShort(TYPE_ID)))
+                        .build();
                 products.add(product);
             }
         } catch (SQLException e){
@@ -68,7 +76,6 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public Optional<Product> selectById(Long id) throws DaoException {
-        Product product = new Product();
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID))
@@ -78,17 +85,20 @@ public class ProductDaoImpl implements ProductDao {
             if(!resultSet.next()){
                 return Optional.empty();
             } else{
-                product.setId(resultSet.getLong(ID));
-                product.setWeight(resultSet.getInt(PRODUCT_WEIGHT));
-                product.setLength(resultSet.getInt(PRODUCT_LENGTH));
-                product.setWidth(resultSet.getInt(PRODUCT_WIDTH));
-                product.setProductType(ProductType.parseType(resultSet.getShort(TYPE_ID)));
+                Product product = new Product.ProductBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setWeight(resultSet.getInt(PRODUCT_WEIGHT))
+                        .setLength(resultSet.getInt(PRODUCT_LENGTH))
+                        .setWidth(resultSet.getInt(PRODUCT_WIDTH))
+                        .setHeight(resultSet.getInt(PRODUCT_HEIGHT))
+                        .setProductType(ProductType.parseType(resultSet.getShort(TYPE_ID)))
+                        .build();
+                return Optional.of(product);
             }
         } catch (SQLException e){
             logger.error("SQL exception in method selectProductId", e);
             throw new DaoException("SQL exception in method selectProductId", e);
         }
-        return Optional.of(product);
     }
 
     @Override
@@ -101,12 +111,14 @@ public class ProductDaoImpl implements ProductDao {
             statement.setInt(1,type);
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()){
-                Product product = new Product();
-                product.setId(resultSet.getLong(ID));
-                product.setWeight(resultSet.getInt(PRODUCT_WEIGHT));
-                product.setLength(resultSet.getInt(PRODUCT_LENGTH));
-                product.setWidth(resultSet.getInt(PRODUCT_WIDTH));
-                product.setProductType(ProductType.parseType(resultSet.getShort(TYPE_ID)));
+                Product product = new Product.ProductBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setWeight(resultSet.getInt(PRODUCT_WEIGHT))
+                        .setLength(resultSet.getInt(PRODUCT_LENGTH))
+                        .setWidth(resultSet.getInt(PRODUCT_WIDTH))
+                        .setHeight(resultSet.getInt(PRODUCT_HEIGHT))
+                        .setProductType(ProductType.parseType(resultSet.getShort(TYPE_ID)))
+                        .build();
                 products.add(product);
             }
         } catch (SQLException e){

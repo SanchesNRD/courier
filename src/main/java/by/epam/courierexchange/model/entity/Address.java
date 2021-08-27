@@ -8,54 +8,37 @@ public class Address extends AbstractEntity{
     private int street_number;
     private int apartment;
 
-    public Address(){}
+    public Address(AddressBuilder builder) {
+        this.id = builder.id;
+        this.country = builder.country;
+        this.city = builder.city;
+        this.street = builder.street;
+        this.street_number = builder.street_number;
+        this.apartment = builder.apartment;
+    }
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getCountry() {
         return country;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
     public String getCity() {
         return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     public String getStreet() {
         return street;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
     public int getStreet_number() {
         return street_number;
     }
 
-    public void setStreet_number(int street_number) {
-        this.street_number = street_number;
-    }
-
     public int getApartment() {
         return apartment;
-    }
-
-    public void setApartment(int apartment) {
-        this.apartment = apartment;
     }
 
     @Override
@@ -110,5 +93,49 @@ public class Address extends AbstractEntity{
         sb.append(", apartment=").append(apartment);
         sb.append('}');
         return sb.toString();
+    }
+
+    public static class AddressBuilder{
+
+        private long id;
+        private String country;
+        private String city;
+        private String street;
+        private int street_number;
+        private int apartment;
+
+        public AddressBuilder setId(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public AddressBuilder setCountry(String country) {
+            this.country = country;
+            return this;
+        }
+
+        public AddressBuilder setCity(String city) {
+            this.city = city;
+            return this;
+        }
+
+        public AddressBuilder setStreet(String street) {
+            this.street = street;
+            return this;
+        }
+
+        public AddressBuilder setStreet_number(int street_number) {
+            this.street_number = street_number;
+            return this;
+        }
+
+        public AddressBuilder setApartment(int apartment) {
+            this.apartment = apartment;
+            return this;
+        }
+
+        public Address build() {
+            return new Address(this);
+        }
     }
 }

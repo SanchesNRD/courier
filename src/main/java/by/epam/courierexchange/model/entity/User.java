@@ -14,68 +14,47 @@ public class User extends AbstractEntity{
         userStatus = UserStatus.NON_CONFIRMED;
     }
 
-    public long getId() {
-        return id;
+    public User(UserBuilder builder) {
+        this.id = builder.id;
+        this.login = builder.login;
+        this.password = builder.password;
+        this.mail = builder.mail;
+        this.name = builder.name;
+        this.surname = builder.surname;
+        this.phone = builder.phone;
+        this.userStatus = builder.userStatus;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public long getId() {
+        return id;
     }
 
     public String getLogin() {
         return login;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getMail() {
         return mail;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getSurname() {
         return surname;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
     public String getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public UserStatus getUserStatus() {
         return userStatus;
-    }
-
-    public void setUserStatus(UserStatus userStatus) {
-        this.userStatus = userStatus;
     }
 
     @Override
@@ -139,5 +118,63 @@ public class User extends AbstractEntity{
         sb.append(", phone='").append(phone).append('\'');
         sb.append(", userStatus=").append(userStatus);
         return sb.toString();
+    }
+
+    public static class UserBuilder{
+
+        private long id;
+        private String login;
+        private String password;
+        private String mail;
+        private String name;
+        private String surname;
+        private String phone;
+        private UserStatus userStatus;
+
+        public UserBuilder(){ }
+
+        public UserBuilder setId(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public UserBuilder setLogin(String login) {
+            this.login = login;
+            return this;
+        }
+
+        public UserBuilder setPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public UserBuilder setMail(String mail) {
+            this.mail = mail;
+            return this;
+        }
+
+        public UserBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public UserBuilder setSurname(String surname) {
+            this.surname = surname;
+            return this;
+        }
+
+        public UserBuilder setPhone(String phone) {
+            this.phone = phone;
+            return this;
+        }
+
+        public UserBuilder setUserStatus(UserStatus userStatus) {
+            this.userStatus = userStatus;
+            return this;
+        }
+
+        public User build() {
+            return new User(this);
+        }
     }
 }

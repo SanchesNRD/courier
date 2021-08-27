@@ -12,52 +12,37 @@ public class Transport extends AbstractEntity{
 
     public Transport(){}
 
-    public long getId() {
-        return id;
+    public Transport(TransportBuilder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
+        this.averageSpeed = builder.averageSpeed;
+        this.image = builder.image;
+        this.maxProductWeight = builder.maxProductWeight;
+        this.transportType = builder.transportType;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public long getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getAverageSpeed() {
         return averageSpeed;
-    }
-
-    public void setAverageSpeed(int averageSpeed) {
-        this.averageSpeed = averageSpeed;
     }
 
     public InputStream getImage() {
         return image;
     }
 
-    public void setImage(InputStream image) {
-        this.image = image;
-    }
-
     public int getMaxProductWeight() {
         return maxProductWeight;
     }
 
-    public void setMaxProductWeight(int maxProductWeight) {
-        this.maxProductWeight = maxProductWeight;
-    }
-
     public TransportType getTransportType() {
         return transportType;
-    }
-
-    public void setTransportType(TransportType transportType) {
-        this.transportType = transportType;
     }
 
     @Override
@@ -111,5 +96,49 @@ public class Transport extends AbstractEntity{
         sb.append(", transportType=").append(transportType);
         sb.append('}');
         return sb.toString();
+    }
+
+    public static class TransportBuilder{
+
+        private long id;
+        private String name;
+        private int averageSpeed;
+        private InputStream image;
+        private int maxProductWeight;
+        private TransportType transportType;
+
+        public TransportBuilder setId(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public TransportBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public TransportBuilder setAverageSpeed(int averageSpeed) {
+            this.averageSpeed = averageSpeed;
+            return this;
+        }
+
+        public TransportBuilder setImage(InputStream image) {
+            this.image = image;
+            return this;
+        }
+
+        public TransportBuilder setMaxProductWeight(int maxProductWeight) {
+            this.maxProductWeight = maxProductWeight;
+            return this;
+        }
+
+        public TransportBuilder setTransportType(TransportType transportType) {
+            this.transportType = transportType;
+            return this;
+        }
+
+        public Transport build() {
+            return new Transport(this);
+        }
     }
 }

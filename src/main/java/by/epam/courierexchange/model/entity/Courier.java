@@ -3,8 +3,9 @@ package by.epam.courierexchange.model.entity;
 public class Courier extends User{
     private double rating;
 
-    public void setRating(double rating) {
-        this.rating = rating;
+    public Courier(CourierBuilder courierBuilder) {
+        super(courierBuilder.builder);
+        this.rating = courierBuilder.rating;
     }
 
     public double getRating() {
@@ -44,5 +45,25 @@ public class Courier extends User{
         sb.append(", rating=").append(rating);
         sb.append('}');
         return sb.toString();
+    }
+
+    public static class CourierBuilder{
+
+        private UserBuilder builder;
+        private double rating;
+
+        public CourierBuilder setBuilder(UserBuilder builder) {
+            this.builder = builder;
+            return this;
+        }
+
+        public CourierBuilder setRating(double rating) {
+            this.rating = rating;
+            return this;
+        }
+
+        public Courier build() {
+            return new Courier(this);
+        }
     }
 }

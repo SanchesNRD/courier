@@ -1,7 +1,6 @@
 package by.epam.courierexchange.model.dao.impl;
 
 import by.epam.courierexchange.model.connection.ConnectionPool;
-import by.epam.courierexchange.model.dao.ColumnName;
 import by.epam.courierexchange.model.dao.TransportDao;
 import by.epam.courierexchange.model.entity.Transport;
 import by.epam.courierexchange.model.entity.TransportType;
@@ -18,6 +17,7 @@ import static by.epam.courierexchange.model.dao.ColumnName.*;
 public class TransportDaoImpl implements TransportDao {
     private static final Logger logger = LogManager.getLogger();
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
+    private static final TransportDaoImpl instance = new TransportDaoImpl();
 
     private static final String SQL_SELECT_ALL="""
             SELECT id, name, average_speed, image, max_product_weight, type_id 
@@ -50,6 +50,12 @@ public class TransportDaoImpl implements TransportDao {
             max_product_weight=?, type_id=? WHERE id=?
             """;
 
+    private TransportDaoImpl(){}
+
+    public static TransportDaoImpl getInstance(){
+        return instance;
+    }
+
     @Override
     public List<Transport> selectAll() throws DaoException {
         List<Transport> transports = new ArrayList<>();
@@ -59,13 +65,14 @@ public class TransportDaoImpl implements TransportDao {
                 ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL))
         {
             while(resultSet.next()){
-                Transport transport = new Transport();
-                transport.setId(resultSet.getLong(ID));
-                transport.setName(resultSet.getString(TRANSPORT_NAME));
-                transport.setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED));
-                transport.setImage((resultSet.getBinaryStream(TRANSPORT_IMAGE)));
-                transport.setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT));
-                transport.setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)));
+                Transport transport = new Transport.TransportBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setName(resultSet.getString(TRANSPORT_NAME))
+                        .setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED))
+                        .setImage((resultSet.getBinaryStream(TRANSPORT_IMAGE)))
+                        .setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT))
+                        .setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)))
+                        .build();
                 transports.add(transport);
             }
         } catch (SQLException e){
@@ -77,7 +84,6 @@ public class TransportDaoImpl implements TransportDao {
 
     @Override
     public Optional<Transport> selectById(Long id) throws DaoException {
-        Transport transport = new Transport();
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID))
@@ -87,12 +93,14 @@ public class TransportDaoImpl implements TransportDao {
             if(!resultSet.next()){
                 return Optional.empty();
             }else{
-                transport.setId(resultSet.getLong(ID));
-                transport.setName(resultSet.getString(TRANSPORT_NAME));
-                transport.setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED));
-                transport.setImage((resultSet.getBinaryStream(TRANSPORT_IMAGE)));
-                transport.setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT));
-                transport.setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)));
+                Transport transport = new Transport.TransportBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setName(resultSet.getString(TRANSPORT_NAME))
+                        .setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED))
+                        .setImage((resultSet.getBinaryStream(TRANSPORT_IMAGE)))
+                        .setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT))
+                        .setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)))
+                        .build();
                 return Optional.of(transport);
             }
         } catch (SQLException e){
@@ -111,13 +119,14 @@ public class TransportDaoImpl implements TransportDao {
             statement.setInt(1, type);
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()){
-                Transport transport = new Transport();
-                transport.setId(resultSet.getLong(ID));
-                transport.setName(resultSet.getString(TRANSPORT_NAME));
-                transport.setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED));
-                transport.setImage((resultSet.getBinaryStream(TRANSPORT_IMAGE)));
-                transport.setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT));
-                transport.setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)));
+                Transport transport = new Transport.TransportBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setName(resultSet.getString(TRANSPORT_NAME))
+                        .setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED))
+                        .setImage((resultSet.getBinaryStream(TRANSPORT_IMAGE)))
+                        .setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT))
+                        .setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)))
+                        .build();
                 transports.add(transport);
             }
         } catch (SQLException e){
@@ -137,13 +146,14 @@ public class TransportDaoImpl implements TransportDao {
             statement.setInt(1, speed);
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()){
-                Transport transport = new Transport();
-                transport.setId(resultSet.getLong(ID));
-                transport.setName(resultSet.getString(TRANSPORT_NAME));
-                transport.setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED));
-                transport.setImage((resultSet.getBinaryStream(TRANSPORT_IMAGE)));
-                transport.setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT));
-                transport.setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)));
+                Transport transport = new Transport.TransportBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setName(resultSet.getString(TRANSPORT_NAME))
+                        .setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED))
+                        .setImage((resultSet.getBinaryStream(TRANSPORT_IMAGE)))
+                        .setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT))
+                        .setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)))
+                        .build();
                 transports.add(transport);
             }
         } catch (SQLException e){
@@ -163,13 +173,14 @@ public class TransportDaoImpl implements TransportDao {
             statement.setInt(1, weight);
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()){
-                Transport transport = new Transport();
-                transport.setId(resultSet.getLong(ID));
-                transport.setName(resultSet.getString(TRANSPORT_NAME));
-                transport.setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED));
-                transport.setImage((resultSet.getBinaryStream(TRANSPORT_IMAGE)));
-                transport.setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT));
-                transport.setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)));
+                Transport transport = new Transport.TransportBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setName(resultSet.getString(TRANSPORT_NAME))
+                        .setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED))
+                        .setImage((resultSet.getBinaryStream(TRANSPORT_IMAGE)))
+                        .setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT))
+                        .setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)))
+                        .build();
                 transports.add(transport);
             }
         } catch (SQLException e){

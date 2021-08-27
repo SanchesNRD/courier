@@ -12,72 +12,47 @@ public class Order extends AbstractEntity{
     private Date date;
     private OrderStatus orderStatus;
 
-    public Order(){
-        //orderStatus = OrderStatus.;
+    public Order(OrderBuilder builder) {
+        this.id = builder.id;
+        this.client = builder.client;
+        this.product = builder.product;
+        this.transport = builder.transport;
+        this.address = builder.address;
+        this.courier = builder.courier;
+        this.date = builder.date;
+        this.orderStatus = builder.orderStatus;
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public long getClient() {
         return client;
-    }
-
-    public void setClient(long client) {
-        this.client = client;
     }
 
     public long getProduct() {
         return product;
     }
 
-    public void setProduct(long product) {
-        this.product = product;
-    }
-
     public long getTransport() {
         return transport;
-    }
-
-    public void setTransport(long transport) {
-        this.transport = transport;
     }
 
     public long getAddress() {
         return address;
     }
 
-    public void setAddress(long address) {
-        this.address = address;
-    }
-
     public long getCourier() {
         return courier;
-    }
-
-    public void setCourier(long courier) {
-        this.courier = courier;
     }
 
     public Date getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public OrderStatus getOrderStatus() {
         return orderStatus;
-    }
-
-    public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
     }
 
     @Override
@@ -126,5 +101,61 @@ public class Order extends AbstractEntity{
         sb.append(", orderStatus=").append(orderStatus);
         sb.append('}');
         return sb.toString();
+    }
+
+    public static class OrderBuilder{
+
+        private long id;
+        private long client;
+        private long product;
+        private long transport;
+        private long address;
+        private long courier;
+        private Date date;
+        private OrderStatus orderStatus;
+
+        public OrderBuilder setId(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public OrderBuilder setClient(long client) {
+            this.client = client;
+            return this;
+        }
+
+        public OrderBuilder setProduct(long product) {
+            this.product = product;
+            return this;
+        }
+
+        public OrderBuilder setTransport(long transport) {
+            this.transport = transport;
+            return this;
+        }
+
+        public OrderBuilder setAddress(long address) {
+            this.address = address;
+            return this;
+        }
+
+        public OrderBuilder setCourier(long courier) {
+            this.courier = courier;
+            return this;
+        }
+
+        public OrderBuilder setDate(Date date) {
+            this.date = date;
+            return this;
+        }
+
+        public OrderBuilder setOrderStatus(OrderStatus orderStatus) {
+            this.orderStatus = orderStatus;
+            return this;
+        }
+
+        public Order build() {
+            return new Order(this);
+        }
     }
 }

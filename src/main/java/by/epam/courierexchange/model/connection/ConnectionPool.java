@@ -41,7 +41,7 @@ public class ConnectionPool {
             freeConnection = new LinkedBlockingDeque<>(poolSize);
             givenAwayConnection = new LinkedBlockingDeque<>();
             for(int i = 0; i < poolSize; i++){
-                ProxyConnection proxyConnection = ConnectionFactory.creatConnection();
+                ProxyConnection proxyConnection = ConnectionFactory.createConnection();
                 freeConnection.add(proxyConnection);
             }
         }catch (IOException e) {
@@ -97,6 +97,7 @@ public class ConnectionPool {
                 logger.error("Error with current thread" + e);
             }
         }else{
+            //false кидать
             logger.error("Wrong connection is detected:" + connection.getClass() +
                     "should be ProxyConnection ");
             throw new RuntimeException("Wrong connection is detected:" + connection.getClass() +

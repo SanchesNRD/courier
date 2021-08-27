@@ -11,64 +11,42 @@ public class Product extends AbstractEntity{
     private BigDecimal pricePerKilo;
     private ProductType productType;
 
-    public Product(){
-        productType = ProductType.DEFAULT;
+    public Product(ProductBuilder builder) {
+        this.id = builder.id;
+        this.weight = builder.weight;
+        this.length = builder.length;
+        this.width = builder.width;
+        this.height = builder.height;
+        this.pricePerKilo = builder.pricePerKilo;
+        this.productType = builder.productType;
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public int getWeight() {
         return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
     }
 
     public int getLength() {
         return length;
     }
 
-    public void setLength(int length) {
-        this.length = length;
-    }
-
     public int getWidth() {
         return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
     }
 
     public int getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
     public BigDecimal getPricePerKilo() {
         return pricePerKilo;
     }
 
-    public void setPricePerKilo(BigDecimal pricePerKilo) {
-        this.pricePerKilo = pricePerKilo;
-    }
-
     public ProductType getProductType() {
         return productType;
-    }
-
-    public void setProductType(ProductType productType) {
-        this.productType = productType;
     }
 
     @Override
@@ -114,5 +92,55 @@ public class Product extends AbstractEntity{
         sb.append(", productType=").append(productType);
         sb.append('}');
         return sb.toString();
+    }
+
+    public static class ProductBuilder{
+
+        private long id;
+        private int weight;
+        private int length;
+        private int width;
+        private int height;
+        private BigDecimal pricePerKilo;
+        private ProductType productType;
+
+        public ProductBuilder setId(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public ProductBuilder setWeight(int weight) {
+            this.weight = weight;
+            return this;
+        }
+
+        public ProductBuilder setLength(int length) {
+            this.length = length;
+            return this;
+        }
+
+        public ProductBuilder setWidth(int width) {
+            this.width = width;
+            return this;
+        }
+
+        public ProductBuilder setHeight(int height) {
+            this.height = height;
+            return this;
+        }
+
+        public ProductBuilder setPricePerKilo(BigDecimal pricePerKilo) {
+            this.pricePerKilo = pricePerKilo;
+            return this;
+        }
+
+        public ProductBuilder setProductType(ProductType productType) {
+            this.productType = productType;
+            return this;
+        }
+
+        public Product build() {
+            return new Product(this);
+        }
     }
 }
