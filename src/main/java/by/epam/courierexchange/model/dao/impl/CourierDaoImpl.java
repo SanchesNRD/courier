@@ -17,6 +17,7 @@ import static by.epam.courierexchange.model.dao.ColumnName.*;
 public class CourierDaoImpl implements CourierDao {
     private static final Logger logger = LogManager.getLogger();
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
+    private static final CourierDaoImpl instance = new CourierDaoImpl();
 
     private static final String SQL_SELECT_ALL_COURIER="""
             SELECT couriers.id, couriers.rating, users.login, users.mail, 
@@ -63,6 +64,12 @@ public class CourierDaoImpl implements CourierDao {
             UPDATE courier_transport SET transport_id=?
             WHERE courier_id=?
             """;
+
+    private CourierDaoImpl(){}
+
+    public static CourierDaoImpl getInstance(){
+        return instance;
+    }
 
     @Override
     public List<Courier> selectAll() throws DaoException {

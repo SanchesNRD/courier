@@ -17,6 +17,7 @@ import static by.epam.courierexchange.model.dao.ColumnName.*;
 public class AddressDaoImpl implements AddressDao {
     private static final Logger logger = LogManager.getLogger();
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
+    private static final AddressDaoImpl instance = new AddressDaoImpl();
 
     private static final String SQL_SELECT_ADDRESS_BY_CITY = """
             SELECT id, country, city, street, street_number, apartment
@@ -40,6 +41,11 @@ public class AddressDaoImpl implements AddressDao {
             WHERE id=?
             """;
 
+    private AddressDaoImpl(){}
+
+    public static AddressDaoImpl getInstance(){
+        return instance;
+    }
 
     @Override
     public List<Address> selectByCity(String patternCity) throws DaoException {

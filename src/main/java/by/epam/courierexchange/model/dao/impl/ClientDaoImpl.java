@@ -20,6 +20,7 @@ import static by.epam.courierexchange.model.dao.ColumnName.*;
 public class ClientDaoImpl implements ClientDao {
     private static final Logger logger = LogManager.getLogger();
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
+    private static final ClientDaoImpl instance = new ClientDaoImpl();
 
     private static final String SQL_SELECT_CLIENT_BY_LOGIN= """
             SELECT clients.id, clients.address_id, users.login, users.mail, 
@@ -65,6 +66,12 @@ public class ClientDaoImpl implements ClientDao {
             UPDATE client_product SET product_id=?
             WHERE client_id=?
             """;
+
+    private ClientDaoImpl(){}
+
+    public static ClientDaoImpl getInstance(){
+        return instance;
+    }
 
     @Override
     public Optional<Client> selectClientByLogin(String loginPattern) throws DaoException {
