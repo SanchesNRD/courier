@@ -2,6 +2,7 @@ package by.epam.courierexchange.model.dao.impl;
 
 import by.epam.courierexchange.model.connection.ConnectionPool;
 import by.epam.courierexchange.model.dao.ProductDao;
+import by.epam.courierexchange.model.entity.ClientProduct;
 import by.epam.courierexchange.model.entity.Product;
 import by.epam.courierexchange.model.entity.ProductType;
 import by.epam.courierexchange.exception.DaoException;
@@ -40,6 +41,10 @@ public class ProductDaoImpl implements ProductDao {
     private static final String SQL_UPDATE="""
             UPDATE products SET weight=?, length=?, width=?, 
             height=?, type_id=? WHERE id=?
+            """;
+    private static final String SQL_SELECT_CLIENT_PRODUCT_BY_ID="""
+            SELECT client_id, product_id
+            FROM client_product WHERE product_id=?
             """;
 
     private ProductDaoImpl(){}
@@ -177,6 +182,28 @@ public class ProductDaoImpl implements ProductDao {
         } catch (SQLException e){
             logger.error("SQL exception in method updateProduct ", e);
             throw new DaoException("SQL exception in method updateProduct ", e);
+        }
+    }
+
+    @Override
+    public Optional<ClientProduct> selectClientProductById(Long id) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_CLIENT_PRODUCT_BY_ID))
+        {
+            ClientProduct clientProduct = new ClientProduct();
+            statement.setLong(1,id);
+            ResultSet resultSet = statement.executeQuery();
+            if(!resultSet.next()) {
+                return Optional.empty();
+            }else{
+                clientProduct.setClient(resultSet.getLong(CLIENT_ID));
+                clientProduct.setProduct(resultSet.getLong(PRODUCT_ID));
+                return Optional.of(clientProduct);
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method selectClientProductById ", e);
+            throw new DaoException("SQL exception in method selectClientProductById ", e);
         }
     }
 }

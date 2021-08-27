@@ -2,10 +2,7 @@ package by.epam.courierexchange.model.dao.impl;
 
 import by.epam.courierexchange.model.connection.ConnectionPool;
 import by.epam.courierexchange.model.dao.CourierDao;
-import by.epam.courierexchange.model.entity.Client;
-import by.epam.courierexchange.model.entity.Courier;
-import by.epam.courierexchange.model.entity.User;
-import by.epam.courierexchange.model.entity.UserStatus;
+import by.epam.courierexchange.model.entity.*;
 import by.epam.courierexchange.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,6 +44,25 @@ public class CourierDaoImpl implements CourierDao {
             "INSERT INTO couriers (id, rating) VALUES (?,?)";
     private static final String SQL_UPDATE=
             "UPDATE couriers SET rating=? WHERE id=?";
+    //for table courier_transport
+    private static final String SQL_SELECT_ALL_COURIER_TRANSPORT="""
+            SELECT courier_id, transport_id 
+            FROM courier_transport
+            """;
+    private static final String SQL_SELECT_COURIER_TRANSPORT_BY_ID="""
+            SELECT courier_id, transport_id 
+            FROM courier_transport WHERE courier_id=?
+            """;
+    private static final String SQL_DELETE_COURIER_TRANSPORT_BY_ID=
+            "DELETE FROM courier_transport WHERE courier_id=?";
+    private static final String SQL_INSERT_COURIER_TRANSPORT="""
+            INSERT INTO courier_transport (courier_id, transport_id)
+            VALUES (?,?)
+            """;
+    private static final String SQL_UPDATE_COURIER_TRANSPORT= """
+            UPDATE courier_transport SET transport_id=?
+            WHERE courier_id=?
+            """;
 
     @Override
     public List<Courier> selectAll() throws DaoException {
@@ -212,6 +228,94 @@ public class CourierDaoImpl implements CourierDao {
         } catch (SQLException e){
             logger.error("SQL exception in method in updateCourier ", e);
             throw new DaoException("SQL exception in method in updateCourier ", e);
+        }
+    }
+
+    //courier_transport
+    @Override
+    public List<CourierTransport> selectAllCourierTransport() throws DaoException {
+        List<CourierTransport> courierTransports = new ArrayList<>();
+        try(
+                Connection connection = connectionPool.getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_COURIER_TRANSPORT))
+        {
+            while (resultSet.next()){
+                CourierTransport courierTransport = new CourierTransport();
+                courierTransport.setCourier(resultSet.getLong(COURTIER_ID));
+                courierTransport.setTransport(resultSet.getLong(TRANSPORT_ID));
+                courierTransports.add(courierTransport);
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method in selectAllCourierTransport ", e);
+            throw new DaoException("SQL exception in method in selectAllCourierTransport ", e);
+        }
+        return courierTransports;
+    }
+
+    @Override
+    public Optional<CourierTransport> selectCourierTransportById(Long id) throws DaoException {
+        CourierTransport courierTransport = new CourierTransport();
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_COURIER_TRANSPORT_BY_ID))
+        {
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (!resultSet.next()){
+                return Optional.empty();
+            }else{
+                courierTransport.setCourier(resultSet.getLong(COURTIER_ID));
+                courierTransport.setTransport(resultSet.getLong(TRANSPORT_ID));
+                return Optional.of(courierTransport);
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method in selectCourierTransportById ", e);
+            throw new DaoException("SQL exception in method in selectCourierTransportById ", e);
+        }
+    }
+
+    @Override
+    public boolean deleteCourierTransportById(Long id) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_COURIER_TRANSPORT_BY_ID))
+        {
+            statement.setLong(1,id);
+            return statement.execute();
+        } catch (SQLException e){
+            logger.error("SQL exception in method in deleteCourierTransport ", e);
+            throw new DaoException("SQL exception in method in deleteCourierTransport ", e);
+        }
+    }
+
+    @Override
+    public boolean createCourierTransport(CourierTransport courierTransport) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_INSERT_COURIER_TRANSPORT))
+        {
+            statement.setLong(1,courierTransport.getCourier());
+            statement.setLong(2, courierTransport.getTransport());
+            return statement.execute();
+        } catch (SQLException e){
+            logger.error("SQL exception in method in createCourierTransport ", e);
+            throw new DaoException("SQL exception in method in createCourierTransport ", e);
+        }
+    }
+
+    @Override
+    public int updateCourierTransport(CourierTransport courierTransport) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_COURIER_TRANSPORT))
+        {
+            statement.setLong(1, courierTransport.getTransport());
+            statement.setLong(2,courierTransport.getCourier());
+            return statement.executeUpdate();
+        } catch (SQLException e){
+            logger.error("SQL exception in method in updateCourierTransport ", e);
+            throw new DaoException("SQL exception in method in updateCourierTransport ", e);
         }
     }
 }

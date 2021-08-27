@@ -2,6 +2,7 @@ package by.epam.courierexchange.model.dao.impl;
 
 import by.epam.courierexchange.model.connection.ConnectionPool;
 import by.epam.courierexchange.model.dao.TransportDao;
+import by.epam.courierexchange.model.entity.CourierTransport;
 import by.epam.courierexchange.model.entity.Transport;
 import by.epam.courierexchange.model.entity.TransportType;
 import by.epam.courierexchange.exception.DaoException;
@@ -48,6 +49,10 @@ public class TransportDaoImpl implements TransportDao {
     private static final String SQL_UPDATE="""
             UPDATE transports SET name=?, average_speed=?, image=?, 
             max_product_weight=?, type_id=? WHERE id=?
+            """;
+    private static final String SQL_SELECT_COURIER_TRANSPORT_BY_ID="""
+            SELECT courier_id, transport_id 
+            FROM courier_transport WHERE transport_id=?
             """;
 
     private TransportDaoImpl(){}
@@ -239,6 +244,28 @@ public class TransportDaoImpl implements TransportDao {
         } catch (SQLException e){
             logger.error("SQL exception in method updateTransport ", e);
             throw new DaoException("SQL exception in method updateTransport ", e);
+        }
+    }
+
+    @Override
+    public Optional<CourierTransport> selectCourierTransportById(Long id) throws DaoException {
+        CourierTransport courierTransport = new CourierTransport();
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_COURIER_TRANSPORT_BY_ID))
+        {
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (!resultSet.next()){
+                return Optional.empty();
+            }else{
+                courierTransport.setCourier(resultSet.getLong(COURTIER_ID));
+                courierTransport.setTransport(resultSet.getLong(TRANSPORT_ID));
+                return Optional.of(courierTransport);
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method in selectCourierTransportById ", e);
+            throw new DaoException("SQL exception in method in selectCourierTransportById ", e);
         }
     }
 }

@@ -3,6 +3,7 @@ package by.epam.courierexchange.model.dao.impl;
 import by.epam.courierexchange.model.connection.ConnectionPool;
 import by.epam.courierexchange.model.dao.ClientDao;
 import by.epam.courierexchange.model.entity.Client;
+import by.epam.courierexchange.model.entity.ClientProduct;
 import by.epam.courierexchange.model.entity.User;
 import by.epam.courierexchange.model.entity.UserStatus;
 import by.epam.courierexchange.exception.DaoException;
@@ -44,6 +45,26 @@ public class ClientDaoImpl implements ClientDao {
             "INSERT INTO clients (id, address_id) VALUES (?,?)";
     private static final String SQL_UPDATE_CLIENT=
             "UPDATE clients SET address_id=? WHERE id=?";
+
+    //client_product
+    private static final String SQL_SELECT_ALL_CLIENT_PRODUCT="""
+            SELECT client_id, product_id 
+            FROM client_product
+            """;
+    private static final String SQL_SELECT_CLIENT_PRODUCT_BY_ID="""
+            SELECT client_id, product_id
+            FROM client_product WHERE client_id=?
+            """;
+    private static final String SQL_DELETE_CLIENT_PRODUCT_BY_ID=
+            "DELETE FROM client_product WHERE client_id=?";
+    private static final String SQL_INSERT_CLIENT_PRODUCT="""
+            INSERT INTO client_product (client_id, product_id)
+            VALUES (?,?)
+            """;
+    private static final String SQL_UPDATE_CLIENT_PRODUCT="""
+            UPDATE client_product SET product_id=?
+            WHERE client_id=?
+            """;
 
     @Override
     public Optional<Client> selectClientByLogin(String loginPattern) throws DaoException {
@@ -208,6 +229,94 @@ public class ClientDaoImpl implements ClientDao {
         } catch (SQLException e){
             logger.error("SQL exception in method updateClient ", e);
             throw new DaoException("SQL exception in method updateClient ", e);
+        }
+    }
+
+    //client_product
+    @Override
+    public List<ClientProduct> selectAllClientProduct() throws DaoException {
+        List<ClientProduct> clientProducts = new ArrayList<>();
+        try(
+                Connection connection = connectionPool.getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_CLIENT_PRODUCT))
+        {
+            while (resultSet.next()){
+                ClientProduct clientProduct = new ClientProduct();
+                clientProduct.setClient(resultSet.getLong(CLIENT_ID));
+                clientProduct.setProduct(resultSet.getLong(PRODUCT_ID));
+                clientProducts.add(clientProduct);
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method selectAllClientProducts ", e);
+            throw new DaoException("SQL exception in method selectAllClientProducts ", e);
+        }
+        return clientProducts;
+    }
+
+    @Override
+    public Optional<ClientProduct> selectClientProductById(Long id) throws DaoException {
+        ClientProduct clientProduct = new ClientProduct();
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_CLIENT_PRODUCT_BY_ID))
+        {
+            statement.setLong(1,id);
+            ResultSet resultSet = statement.executeQuery();
+            if(!resultSet.next()) {
+                return Optional.empty();
+            }else{
+                clientProduct.setClient(resultSet.getLong(CLIENT_ID));
+                clientProduct.setProduct(resultSet.getLong(PRODUCT_ID));
+                return Optional.of(clientProduct);
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method selectClientProductById ", e);
+            throw new DaoException("SQL exception in method selectClientProductById ", e);
+        }
+    }
+
+    @Override
+    public boolean deleteClientProductById(Long id) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_CLIENT_PRODUCT_BY_ID))
+        {
+            statement.setLong(1,id);
+            return statement.execute();
+        } catch (SQLException e){
+            logger.error("SQL exception in method deleteClientProductById ", e);
+            throw new DaoException("SQL exception in method deleteClientProductById ", e);
+        }
+    }
+
+    @Override
+    public boolean createClientProduct(ClientProduct clientProduct) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_INSERT_CLIENT_PRODUCT))
+        {
+            statement.setLong(1,clientProduct.getClient());
+            statement.setLong(2, clientProduct.getProduct());
+            return statement.execute();
+        } catch (SQLException e){
+            logger.error("SQL exception in method createClientProduct ", e);
+            throw new DaoException("SQL exception in method createClientProduct ", e);
+        }
+    }
+
+    @Override
+    public int updateClientProduct(ClientProduct clientProduct) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_CLIENT_PRODUCT))
+        {
+            statement.setLong(1,clientProduct.getProduct());
+            statement.setLong(2, clientProduct.getClient());
+            return statement.executeUpdate();
+        } catch (SQLException e){
+            logger.error("SQL exception in method createClientProduct ", e);
+            throw new DaoException("SQL exception in method createClientProduct ", e);
         }
     }
 }
