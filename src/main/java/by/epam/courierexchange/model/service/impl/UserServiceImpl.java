@@ -6,6 +6,7 @@ import by.epam.courierexchange.model.dao.impl.UserDaoImpl;
 import by.epam.courierexchange.model.entity.User;
 import by.epam.courierexchange.model.service.UserService;
 import by.epam.courierexchange.model.validator.UserValidator;
+import by.epam.courierexchange.util.PasswordEncryption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Optional<User> authorized(String login, String password) throws ServiceException {
+    public Optional<User> authorization(String login, String password) throws ServiceException {
         Optional<User> optionalUser;
         User user;
         if (!UserValidator.loginIsValid(login) && !UserValidator.passwordIsValid(password)){
@@ -41,7 +42,9 @@ public class UserServiceImpl implements UserService {
                 return Optional.empty();
             }
             user = optionalUser.get();
-            if(!password.equals(user.getPassword())){
+            String plainPass = user.getPassword();
+            String hashedPass = PasswordEncryption.encode(password);
+            if(PasswordEncryption.matches(plainPass, hashedPass)){
                 return Optional.empty();
             }
         } catch (DaoException e) {

@@ -3,7 +3,10 @@ package by.epam.courierexchange.model.entity;
 import java.util.Arrays;
 
 public enum UserStatus{
-    CONFIRMED((short)1), NON_CONFIRMED((short)2), BANED((short)3), ADMIN((short) 4);
+    CONFIRMED((short)1),
+    NON_CONFIRMED((short)2),
+    BANED((short)3),
+    ADMIN((short) 4);
 
     private static final String UNDERSCORE = "_";
     private static final String HYPHEN = "-";

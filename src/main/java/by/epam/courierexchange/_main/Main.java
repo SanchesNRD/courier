@@ -10,25 +10,15 @@ import by.epam.courierexchange.model.service.impl.UserServiceImpl;
 import by.epam.courierexchange.model.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
 import java.util.Optional;
 
 public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
-
+//$2a$10$RQzI/sqn2tQTud9DKslSJO
     public static void main(String... args) {
-        try {
-            Optional<User> optionalUser = UserServiceImpl.getInstance().authorized("Zefix", "12345678");
-            if(optionalUser.isEmpty()){
-                System.out.println("empty");
-            }
-            else{
-                System.out.println("not empty");
-                System.out.println(optionalUser.get().toString());
-            }
-        } catch (ServiceException e) {
-            System.out.println(e);
-        }
+        System.out.println(BCrypt.hashpw("a12345678", "$2a$10$RQzI/sqn2tQTud9DKslSJOe"));
     }
 }

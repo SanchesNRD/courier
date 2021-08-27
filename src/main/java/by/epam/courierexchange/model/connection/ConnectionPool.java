@@ -10,7 +10,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
@@ -19,15 +19,15 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ConnectionPool {
     private final static Logger logger = LogManager.getLogger();
-    private static final String POOL_RESOURCE = "datares/pool.properties";
+    private static final String POOL_RESOURCE = "datares/database.properties";
     private static final String PROPERTIES_POOLSIZE = "poolsize";
-    private final static int DEFAULT_POOL_SIZE = 16;
+    private final static int DEFAULT_POOL_SIZE = 4;
     private final static Lock lock = new ReentrantLock(true);
     private final static AtomicBoolean instanceInitialized = new AtomicBoolean(false);
     private static ConnectionPool instance;
 
-    private BlockingDeque<ProxyConnection> freeConnection;
-    private BlockingDeque<ProxyConnection> givenAwayConnection;
+    private BlockingQueue<ProxyConnection> freeConnection;
+    private BlockingQueue<ProxyConnection> givenAwayConnection;
 
 
     private ConnectionPool(){
@@ -87,22 +87,24 @@ public class ConnectionPool {
         return connection;
     }
 
-    public void releaseConnection(Connection connection){
+    public boolean releaseConnection(Connection connection){
+        boolean result;
         if(connection.getClass()==ProxyConnection.class){
             givenAwayConnection.remove(connection);
             try {
                 freeConnection.put((ProxyConnection) connection);
+                result = true;
             } catch (InterruptedException e) {
+                result = false;
                 Thread.currentThread().interrupt();
                 logger.error("Error with current thread" + e);
             }
         }else{
-            //false кидать
-            logger.error("Wrong connection is detected:" + connection.getClass() +
-                    "should be ProxyConnection ");
-            throw new RuntimeException("Wrong connection is detected:" + connection.getClass() +
+            result = false;
+            logger.warn("Wrong connection is detected:" + connection.getClass() +
                     "should be ProxyConnection ");
         }
+        return result;
     }
 
     public void destroyPool(){

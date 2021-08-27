@@ -2,8 +2,7 @@ package by.epam.courierexchange.model.validator;
 
 public class UserValidator {
     private static final String LOGIN_PATTERN = "(?=.*[a-z])[a-zA-Z\\d_]{4,20}";
-    private static final String PASSWORD_PATTER = "[0-9a-zA-Z_]{8,40}";
-    //private static final String PASSWORD_PATTER = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z_]{8,40}";
+    private static final String PASSWORD_PATTER = "(?=.*[0-9])(?=.*[a-z])[0-9a-zA-Z_]{8,40}";
     private static final String PHONE_PATTERN = "(\\+375|80)(29|25|44|33)[\\d]{7}";
     private static final String EMAIL_PATTERN =
             "^([a-z0-9_-]+\\.)*[a-z0-9_-]+@[a-z0-9_-]+(\\.[a-z0-9_-]+)*\\.[a-z]{2,6}$";
