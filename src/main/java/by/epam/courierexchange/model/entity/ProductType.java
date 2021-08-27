@@ -3,7 +3,10 @@ package by.epam.courierexchange.model.entity;
 import java.util.Arrays;
 
 public enum ProductType{
-    DEFAULT((short)1,1), FRAGILE((short)2,2), EXPLOSIVE((short)3,3), POISONOUS((short)4,4);
+    DEFAULT((short)1,1),
+    FRAGILE((short)2,5),
+    EXPLOSIVE((short)3,10),
+    POISONOUS((short)4,10);
 
     private short id;
     private int multiplier;

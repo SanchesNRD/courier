@@ -10,7 +10,8 @@ public class Transport extends AbstractEntity{
     private int maxProductWeight;
     private TransportType transportType;
 
-    public Transport(){}
+    public Transport(){
+    }
 
     public Transport(TransportBuilder builder) {
         this.id = builder.id;
