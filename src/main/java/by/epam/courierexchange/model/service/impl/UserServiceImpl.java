@@ -14,16 +14,13 @@ import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger();
-    private static UserServiceImpl instance;
+    private static final UserServiceImpl instance = new UserServiceImpl();
     private static final UserDaoImpl userDao = UserDaoImpl.getInstance();
 
-    private UserServiceImpl() {
+    public UserServiceImpl() {
     }
 
     public static UserServiceImpl getInstance() {
-        if (instance == null) {
-            instance = new UserServiceImpl();
-        }
         return instance;
     }
 
@@ -44,7 +41,7 @@ public class UserServiceImpl implements UserService {
             user = optionalUser.get();
             String plainPass = user.getPassword();
             String hashedPass = PasswordEncryption.encode(password);
-            if(PasswordEncryption.matches(plainPass, hashedPass)){
+            if(!PasswordEncryption.matches(plainPass, hashedPass)){
                 return Optional.empty();
             }
         } catch (DaoException e) {
@@ -52,5 +49,26 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("exception while working with the database ", e);
         }
         return optionalUser;
+    }
+
+    @Override
+    public boolean registration(User user) throws ServiceException {
+        if(!UserValidator.loginIsValid(user.getLogin()) &&
+                !UserValidator.passwordIsValid(user.getPassword())){
+            return false;
+        }
+
+        try{
+            return userDao.create(user);
+        } catch (DaoException e){
+            logger.error("Exception wile working with database ", e);
+            throw new ServiceException("Exception wile working with database ", e);
+        }
+    }
+
+    @Override
+    public boolean updatePassword(User user) throws ServiceException {
+        // TODO: 11.09.2021 !!!
+        return false;
     }
 }

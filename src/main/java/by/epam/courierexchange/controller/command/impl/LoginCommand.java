@@ -31,12 +31,13 @@ public class LoginCommand implements Command {
                 User user = optionalUser.get();
                 HttpSession session = request.getSession(true);
                 session.setAttribute(SessionAttribute.USER, user);
-                request.setAttribute(USER_LOGIN, user.getLogin());
                 switch (user.getUserStatus()){
-                    case CONFIRMED, NON_CONFIRMED ->
-                            commandResult = new CommandResult(SUCCESS_PAGE, REDIRECT);
+                    case CONFIRMED ->
+                            commandResult = new CommandResult(PROFILE_PAGE, FORWARD);
+                    case NON_CONFIRMED ->
+                            commandResult = new CommandResult(PROFILE_PAGE, FORWARD);
                     case ADMIN ->
-                            commandResult = new CommandResult(ADMIN_PAGE, REDIRECT);
+                            commandResult = new CommandResult(ADMIN_PAGE, FORWARD);
                     case BANED -> {
                         request.setAttribute(BANNED_USER, true);
                         commandResult = new CommandResult(LOGIN_PAGE, FORWARD);

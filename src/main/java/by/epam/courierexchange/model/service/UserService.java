@@ -7,5 +7,7 @@ import java.util.Optional;
 
 public interface UserService {
     Optional<User> authorization(String login, String password) throws ServiceException;
+    boolean registration(User user) throws ServiceException;
+    boolean updatePassword(User user) throws ServiceException;
 
 }
